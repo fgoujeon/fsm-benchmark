@@ -22,6 +22,7 @@ EVENT(event6);
 EVENT(event7);
 EVENT(event8);
 EVENT(event9);
+EVENT(event_internal);
 
 #undef EVENT
 
@@ -42,14 +43,16 @@ class fsm: public tinyfsm::Fsm<fsm>
         virtual void react(const event7&){}
         virtual void react(const event8&){}
         virtual void react(const event9&){}
+        virtual void react(const event_internal&){}
 
-        //I could have make it nonvirtual because entry() functions don't
-        //make anything. This would make transitions faster. But a real-life
-        //project would probably need to implement entry actions.
         virtual void entry(){}
 
-        void exit(){}
+        virtual void exit(){}
+
+        static int i;
 };
+
+int fsm::i = 0;
 
 class state0;
 class state1;
@@ -67,11 +70,22 @@ class state9;
     { \
         void entry() override \
         { \
+            i = 1; \
         } \
  \
         void react(const EVENT&) override \
         { \
             transit<TARGET_STATE>(); \
+        } \
+ \
+        void react(const event_internal&) override \
+        { \
+            i = 2; \
+        } \
+ \
+        void exit() override \
+        { \
+            i = 3; \
         } \
     };
 
@@ -95,17 +109,28 @@ TEST_CASE("tinyfsm")
     auto sm = fsm{};
     sm.start();
 
-    BENCHMARK("state transitions")
+    BENCHMARK("benchmark")
     {
         sm.dispatch(event0{});
+        sm.dispatch(event_internal{});
         sm.dispatch(event1{});
+        sm.dispatch(event_internal{});
         sm.dispatch(event2{});
+        sm.dispatch(event_internal{});
         sm.dispatch(event3{});
+        sm.dispatch(event_internal{});
         sm.dispatch(event4{});
+        sm.dispatch(event_internal{});
         sm.dispatch(event5{});
+        sm.dispatch(event_internal{});
         sm.dispatch(event6{});
+        sm.dispatch(event_internal{});
         sm.dispatch(event7{});
+        sm.dispatch(event_internal{});
         sm.dispatch(event8{});
+        sm.dispatch(event_internal{});
         sm.dispatch(event9{});
+        sm.dispatch(event_internal{});
+        return fsm::i;
     };
 }

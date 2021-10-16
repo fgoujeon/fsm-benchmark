@@ -10,6 +10,7 @@
 
 struct context
 {
+    int i = 0;
 };
 
 struct event0{};
@@ -22,12 +23,26 @@ struct event6{};
 struct event7{};
 struct event8{};
 struct event9{};
+struct event_internal{};
 
 #define STATE(NAME) \
     struct NAME \
     { \
-        void on_entry(){} \
-        void on_exit(){} \
+        void on_entry() \
+        { \
+            ctx.i = 1; \
+        } \
+ \
+        void on_event(const event_internal& e) \
+        { \
+            ctx.i = 2; \
+        } \
+ \
+        void on_exit() \
+        { \
+            ctx.i = 3; \
+        } \
+ \
         context& ctx; \
     };
 
@@ -68,14 +83,25 @@ TEST_CASE("fgfsm")
     BENCHMARK("state transitions")
     {
         sm.process_event(event0{});
+        sm.process_event(event_internal{});
         sm.process_event(event1{});
+        sm.process_event(event_internal{});
         sm.process_event(event2{});
+        sm.process_event(event_internal{});
         sm.process_event(event3{});
+        sm.process_event(event_internal{});
         sm.process_event(event4{});
+        sm.process_event(event_internal{});
         sm.process_event(event5{});
+        sm.process_event(event_internal{});
         sm.process_event(event6{});
+        sm.process_event(event_internal{});
         sm.process_event(event7{});
+        sm.process_event(event_internal{});
         sm.process_event(event8{});
+        sm.process_event(event_internal{});
         sm.process_event(event9{});
+        sm.process_event(event_internal{});
+        return ctx.i;
     };
 }
