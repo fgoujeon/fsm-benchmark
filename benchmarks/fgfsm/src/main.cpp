@@ -28,17 +28,17 @@ struct event_internal{};
 #define STATE(NAME) \
     struct NAME \
     { \
-        void on_entry() \
+        void on_entry(const fgfsm::any_cref&) \
         { \
             ctx.i = 1; \
         } \
  \
-        void on_event(const event_internal& e) \
+        void on_event(const fgfsm::any_cref&) \
         { \
             ctx.i = 2; \
         } \
  \
-        void on_exit() \
+        void on_exit(const fgfsm::any_cref&) \
         { \
             ctx.i = 3; \
         } \
