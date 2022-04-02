@@ -20,7 +20,7 @@ set_target_properties(
 target_include_directories(
     ${TARGET}
     PRIVATE
-        ../../libraries/tinyfsm/include
+        ../../../libraries/tinyfsm/include
 )
 
 target_compile_definitions(

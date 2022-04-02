@@ -6,4 +6,5 @@
 
 cmake_minimum_required(VERSION 3.10)
 
-add_subdirectory(basic)
+add_subdirectory(fgfsm)
+add_subdirectory(tinyfsm)
