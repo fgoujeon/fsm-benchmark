@@ -6,7 +6,7 @@
 
 cmake_minimum_required(VERSION 3.10)
 
-set(TARGET basic-fgfsm)
+set(TARGET sml-large)
 
 file(GLOB_RECURSE SOURCE_FILES *)
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR} FILES ${SOURCE_FILES})
@@ -17,17 +17,10 @@ set_target_properties(
     CXX_STANDARD 17
 )
 
-target_compile_definitions(
-    ${TARGET}
-    PRIVATE
-        CATCH_CONFIG_ENABLE_BENCHMARKING
-)
-
 target_link_libraries(
     ${TARGET}
     PRIVATE
-        fgfsm
-        Catch2::Catch2
+        sml
 )
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
@@ -43,8 +36,3 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
             /W4 /WX /permissive-
     )
 endif()
-
-add_test(
-    NAME ${TARGET}
-    COMMAND ${TARGET}
-)

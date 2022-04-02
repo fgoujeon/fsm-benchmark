@@ -12,3 +12,4 @@ find_package(Catch2 2.13 REQUIRED)
 
 add_subdirectory(benchmarks)
 add_subdirectory(libraries/fgfsm)
+add_subdirectory(libraries/sml)
