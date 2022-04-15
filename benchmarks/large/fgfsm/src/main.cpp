@@ -318,7 +318,12 @@ using transition_table = fgfsm::transition_table
     fgfsm::row<state49, event49, state0,  action49, guard49>
 >;
 
-using fsm = fgfsm::fsm<transition_table>;
+struct fsm_configuration: fgfsm::default_fsm_configuration
+{
+    static constexpr auto enable_in_state_internal_transitions = false;
+};
+
+using fsm = fgfsm::fsm<transition_table, fsm_configuration>;
 
 int main()
 {
