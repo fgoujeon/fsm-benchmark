@@ -5,7 +5,6 @@
 //Official repository: https://github.com/fgoujeon/fgfsm
 
 #include <boost/sml.hpp>
-#include <cassert>
 
 struct context
 {
@@ -251,7 +250,7 @@ struct large
     }
 };
 
-int main()
+int test()
 {
     auto ctx = context{};
     auto sm = boost::sml::sm<large>{ctx};
@@ -305,4 +304,18 @@ int main()
     sm.process_event(event47{});
     sm.process_event(event48{});
     sm.process_event(event49{});
+    return ctx.side_effect;
+}
+
+int main()
+{
+    auto side_effect = 0;
+
+    for(auto i = 0; i < 1'000'000; ++i)
+    {
+        side_effect += test();
+    }
+
+    if(side_effect != 50'000'000)
+        throw 0;
 }

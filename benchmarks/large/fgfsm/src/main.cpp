@@ -14,19 +14,12 @@ struct context
 template<int Id>
 struct state
 {
-    void on_entry(const fgfsm::any_cref&)
+    void on_entry()
     {
-        ++ctx.side_effect;
     }
 
-    void on_event(const fgfsm::any_cref&)
+    void on_exit()
     {
-        ++ctx.side_effect;
-    }
-
-    void on_exit(const fgfsm::any_cref&)
-    {
-        ++ctx.side_effect;
     }
 
     context& ctx;
@@ -41,7 +34,7 @@ struct event
 template<int Id>
 struct action
 {
-    void execute(const fgfsm::any_cref&)
+    void execute()
     {
         ++ctx.side_effect;
     }
@@ -52,7 +45,7 @@ struct action
 template<int Id>
 struct guard
 {
-    bool check(const fgfsm::any_cref&)
+    bool check()
     {
         return ctx.side_effect >= 0;
     }
@@ -320,12 +313,14 @@ using transition_table = fgfsm::transition_table
 
 struct fsm_configuration: fgfsm::default_fsm_configuration
 {
+    //Disable features to be on-par with sml
+    static constexpr auto enable_run_to_completion = false;
     static constexpr auto enable_in_state_internal_transitions = false;
 };
 
 using fsm = fgfsm::fsm<transition_table, fsm_configuration>;
 
-int main()
+int test()
 {
     auto ctx = context{};
     auto sm = fsm{ctx};
@@ -380,4 +375,19 @@ int main()
     sm.process_event(event47{});
     sm.process_event(event48{});
     sm.process_event(event49{});
+
+    return ctx.side_effect;
+}
+
+int main()
+{
+    auto side_effect = 0;
+
+    for(auto i = 0; i < 1'000'000; ++i)
+    {
+        side_effect += test();
+    }
+
+    if(side_effect != 50'000'000)
+        throw 0;
 }
