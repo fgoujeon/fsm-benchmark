@@ -6,10 +6,12 @@
 
 cmake_minimum_required(VERSION 3.10)
 
-project(fsm-benchmark)
+set(TARGET large-common)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+add_library(${TARGET} INTERFACE)
 
-add_subdirectory(benchmarks)
-add_subdirectory(libraries/fgfsm)
-add_subdirectory(libraries/sml)
+target_include_directories(
+    ${TARGET}
+    INTERFACE
+        include
+)
