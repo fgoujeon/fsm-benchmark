@@ -15,3 +15,17 @@ target_include_directories(
     INTERFACE
         include
 )
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    target_compile_options(
+        ${TARGET}
+        INTERFACE
+            -Wall -Werror -pedantic
+    )
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    target_compile_options(
+        ${TARGET}
+        INTERFACE
+            /W4 /WX /permissive-
+    )
+endif()
