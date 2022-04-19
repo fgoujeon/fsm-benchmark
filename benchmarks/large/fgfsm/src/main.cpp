@@ -54,14 +54,13 @@ struct guard
     context& ctx;
 };
 
-#define X(N, NP1) \
-    fgfsm::row<state<N>, event<N>, state<NP1>, action<N>, guard<N>>,
 using transition_table = fgfsm::transition_table
 <
+#define X(N, NP1) \
+    COMMA_IF_NOT_0(N) fgfsm::row<state<N>, event<N>, state<NP1>, action<N>, guard<N>>
     COUNTER_50
-    fgfsm::row<state<49>, event<49>, state<0>, action<49>, guard<49>> //to deal with final comma
->;
 #undef X
+>;
 
 struct fsm_configuration: fgfsm::default_fsm_configuration
 {

@@ -23,7 +23,7 @@ struct event_tpl
     int data = 0;
 };
 
-//Note: Using a constexpr lambda make build slightly slower
+//Note: Using a constexpr lambda makes the build slightly slower (at least on GCC)
 template<int Index>
 struct action
 {
@@ -33,7 +33,7 @@ struct action
     }
 };
 
-//Note: Using a constexpr lambda make build slightly slower
+//Note: Using a constexpr lambda makes the build slightly slower (at least on GCC)
 template<int Index>
 struct guard
 {
@@ -51,11 +51,9 @@ struct large
 
         return make_transition_table
         (
-            *state<state_tpl<0>> + event<event_tpl<0>> [guard<0>{}] / action<0>{} = state<state_tpl<1>>
-
 #define X(N, NP1) \
-    , state<state_tpl<N>> + event<event_tpl<N>> [guard<N>{}] / action<N>{} = state<state_tpl<NP1>>
-            COUNTER_50
+    COMMA_IF_NOT_0(N) state<state_tpl<N>> + event<event_tpl<N>> [guard<N>{}] / action<N>{} = state<state_tpl<NP1>>
+            *COUNTER_50
 #undef X
         );
     }
