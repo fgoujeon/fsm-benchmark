@@ -19,11 +19,23 @@ class TestResult:
 def test(pretty_lib_name, lib_name):
     #Build benchmark
     start_time = time.time()
-    subprocess.run(["cmake", "--build", build_dir, "--target", "large-" + lib_name])
+    subprocess.run([
+        "cmake",
+        "--build", build_dir,
+        "--config", "Release",
+        "--target", "large-" + lib_name])
     end_time = time.time()
     build_time_s = end_time - start_time
 
-    executable_path = os.path.join(build_dir, "bin", "large-" + lib_name)
+    unix_executable_path = os.path.join(build_dir, "bin", "large-" + lib_name)
+    win_executable_path = os.path.join(build_dir, "bin", "Release", "large-" + lib_name + ".exe")
+    if os.path.exists(unix_executable_path):
+        executable_path = unix_executable_path
+    elif os.path.exists(win_executable_path):
+        executable_path = win_executable_path
+    else:
+        print("Can't find executable file")
+        exit()
 
     #Run benchmark
     start_time = time.time()
@@ -36,12 +48,13 @@ def test(pretty_lib_name, lib_name):
 
     return TestResult(pretty_lib_name, build_time_s, execution_time_s, size_B)
 
-if len(sys.argv) != 2:
-    print("Usage: run-benchmarks.py BUILD_DIR")
+if len(sys.argv) != 3:
+    print("Usage: run-benchmarks.py BUILD_DIR BOOST_INCLUDE_DIR")
     exit()
 
 src_dir = os.path.dirname(__file__)
 build_dir = sys.argv[1]
+boost_include_dir = sys.argv[2]
 
 #Initialize CMake
 cmake_command = [
@@ -53,6 +66,7 @@ cmake_command = [
     "-D", "SML_BUILD_EXAMPLES=0",
     "-D", "SML_BUILD_TESTS=0",
     "-D", "SML_USE_EXCEPTIONS=0",
+    "-D", "BOOST_INCLUDE_DIR=" + boost_include_dir
     ]
 subprocess.run(cmake_command)
 
