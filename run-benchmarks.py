@@ -10,13 +10,19 @@ import sys
 import subprocess
 
 class TestResult:
-    def __init__(self, pretty_lib_name, build_time_s, execution_time_s, size_B):
+    def __init__(self, pretty_lib_name, lib_version, build_time_s, execution_time_s, size_B):
         self.pretty_lib_name = pretty_lib_name
+        self.lib_version = lib_version
         self.build_time_s = build_time_s
         self.execution_time_s = execution_time_s
         self.size_B = size_B
 
 def test(pretty_lib_name, lib_name):
+    #Get library version
+    lib_src_dir = os.path.join(src_dir, "libraries", lib_name)
+    result = subprocess.run(['git', 'describe', "--tags"], cwd = lib_src_dir, stdout = subprocess.PIPE)
+    lib_version = result.stdout.decode("utf-8").strip()
+
     #Build benchmark
     start_time = time.time()
     subprocess.run([
@@ -46,7 +52,7 @@ def test(pretty_lib_name, lib_name):
     #Print size
     size_B = os.path.getsize(executable_path)
 
-    return TestResult(pretty_lib_name, build_time_s, execution_time_s, size_B)
+    return TestResult(pretty_lib_name, lib_version, build_time_s, execution_time_s, size_B)
 
 if len(sys.argv) != 3:
     print("Usage: run-benchmarks.py BUILD_DIR BOOST_INCLUDE_DIR")
@@ -81,9 +87,10 @@ print("| | Build time | Execution time | Binary size")
 print("|--|--|--|--")
 for res in results:
     print(
-        '| **%s** | %0.3f s | %0.3f s | %d B' %
+        '| **%s** %s | %0.3f s | %0.3f s | %d B' %
         (
             res.pretty_lib_name,
+            res.lib_version,
             res.build_time_s,
             res.execution_time_s,
             res.size_B
