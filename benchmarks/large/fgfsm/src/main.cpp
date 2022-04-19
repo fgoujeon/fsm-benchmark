@@ -46,9 +46,9 @@ struct action
 template<int Index>
 struct guard
 {
-    bool check()
+    bool check(const event<Index>& evt)
     {
-        return ctx.side_effect >= 0;
+        return evt.data >= 0;
     }
 
     context& ctx;
