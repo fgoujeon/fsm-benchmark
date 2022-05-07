@@ -49,7 +49,11 @@ def test(pretty_lib_name, lib_name):
 
     #Run benchmark
     start_time = time.time()
-    subprocess.run([executable_path])
+    try:
+        out = subprocess.check_output([executable_path])
+    except subprocess.CalledProcessError as ex:
+        print("Test failed with code ", ex.returncode)
+        exit()
     end_time = time.time()
     execution_time_s = end_time - start_time
 
