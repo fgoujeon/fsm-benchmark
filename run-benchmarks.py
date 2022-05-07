@@ -23,6 +23,10 @@ def test(pretty_lib_name, lib_name):
     result = subprocess.run(['git', 'describe', "--tags"], cwd = lib_src_dir, stdout = subprocess.PIPE)
     lib_version = result.stdout.decode("utf-8").strip()
 
+    #I can't checkout v1.1.5 commit for some reason
+    if lib_name == "sml" and lib_version == "v1.1.4-22-g7ed8f85":
+        lib_version = "v1.1.5"
+
     #Build benchmark
     start_time = time.time()
     subprocess.run([
