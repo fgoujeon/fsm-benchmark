@@ -51,8 +51,8 @@ struct large
 
         return make_transition_table
         (
-#define X(N, NP1) \
-    COMMA_IF_NOT_0(N) state<state_tpl<N>> + event<event_tpl<N>> [guard<N>{}] / action<N>{} = state<state_tpl<NP1>>
+#define X(N) \
+    COMMA_IF_NOT_0(N) state<state_tpl<N>> + event<event_tpl<N>> [guard<N>{}] / action<N>{} = state<state_tpl<(N + 1) % 50>>
             *COUNTER_50
 #undef X
         );
@@ -64,7 +64,7 @@ int test()
     auto ctx = context{};
     auto sm = boost::sml::sm<large>{ctx};
 
-#define X(N, NP1) \
+#define X(N) \
     sm.process_event(event_tpl<N>{});
     COUNTER_50
 #undef X

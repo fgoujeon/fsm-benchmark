@@ -45,8 +45,8 @@ struct fsm_configuration: fgfsm::fsm_configuration
 {
     using transition_table = fgfsm::transition_table
     <
-#define X(N, NP1) \
-        COMMA_IF_NOT_0(N) fgfsm::row<state<N>, event<N>, state<NP1>, action<N>, guard<N>>
+#define X(N) \
+        COMMA_IF_NOT_0(N) fgfsm::row<state<N>, event<N>, state<(N + 1) % 50>, action<N>, guard<N>>
         COUNTER_50
 #undef X
     >;
@@ -63,7 +63,7 @@ int test()
     auto ctx = context{};
     auto sm = fsm{ctx};
 
-#define X(N, NP1) \
+#define X(N) \
     sm.process_event(event<N>{});
     COUNTER_50
 #undef X
