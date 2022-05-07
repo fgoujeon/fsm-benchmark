@@ -13,18 +13,7 @@ struct context
 };
 
 template<int Index>
-struct state
-{
-    void on_entry()
-    {
-    }
-
-    void on_exit()
-    {
-    }
-
-    context& ctx;
-};
+struct state{};
 
 template<int Index>
 struct event
@@ -50,26 +39,24 @@ struct guard
     {
         return evt.data >= 0;
     }
-
-    context& ctx;
 };
 
-using transition_table = fgfsm::transition_table
-<
-#define X(N, NP1) \
-    COMMA_IF_NOT_0(N) fgfsm::row<state<N>, event<N>, state<NP1>, action<N>, guard<N>>
-    COUNTER_50
-#undef X
->;
-
-struct fsm_configuration: fgfsm::default_fsm_configuration
+struct fsm_configuration: fgfsm::fsm_configuration
 {
+    using transition_table = fgfsm::transition_table
+    <
+#define X(N, NP1) \
+        COMMA_IF_NOT_0(N) fgfsm::row<state<N>, event<N>, state<NP1>, action<N>, guard<N>>
+        COUNTER_50
+#undef X
+    >;
+
     //Disable features to be on-par with sml
     static constexpr auto enable_run_to_completion = false;
     static constexpr auto enable_in_state_internal_transitions = false;
 };
 
-using fsm = fgfsm::fsm<transition_table, fsm_configuration>;
+using fsm = fgfsm::fsm<fsm_configuration>;
 
 int test()
 {
