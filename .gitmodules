@@ -1,9 +1,6 @@
 [submodule "libraries/fgfsm"]
 	path = libraries/fgfsm
 	url = https://github.com/fgoujeon/fgfsm.git
-[submodule "libraries/tinyfsm"]
-	path = libraries/tinyfsm
-	url = https://github.com/digint/tinyfsm.git
 [submodule "libraries/sml"]
 	path = libraries/sml
 	url = https://github.com/boost-ext/sml.git
