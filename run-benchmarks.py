@@ -21,7 +21,7 @@ def test(pretty_lib_name, lib_name):
     #Get library version
     lib_src_dir = os.path.join(src_dir, "libraries", lib_name)
     if os.path.exists(lib_src_dir):
-        result = subprocess.run(['git', 'describe', "--tags"], cwd = lib_src_dir, stdout = subprocess.PIPE)
+        result = subprocess.run(['git', 'describe', "--tags", "--dirty"], cwd = lib_src_dir, stdout = subprocess.PIPE)
         lib_version = result.stdout.decode("utf-8").strip()
 
         #I can't checkout v1.1.5 commit for some reason
