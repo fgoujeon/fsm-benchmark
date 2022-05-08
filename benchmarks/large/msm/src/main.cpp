@@ -5,7 +5,7 @@
 //Official repository: https://github.com/fgoujeon/fsm-benchmark
 
 #define BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
-#define BOOST_MPL_LIMIT_VECTOR_SIZE PROBLEM_SIZE
+#define BOOST_MPL_LIMIT_VECTOR_SIZE PROBLEM_SIZE_X_2
 
 #include "common.hpp"
 #include <boost/msm/back/state_machine.hpp>
@@ -22,18 +22,34 @@ struct state_tpl: msm::front::state<>
 };
 
 template<int Index>
-struct event
+struct state_transition_event
 {
-    int data = 0;
+    int data = 1;
 };
 
 template<int Index>
-struct action
+struct internal_transition_event
+{
+    int data = 1;
+};
+
+template<int Index>
+struct state_transition_action
 {
     template<class Event, class Fsm, class SourceState, class TargetState>
-    void operator()(const Event&, Fsm& sm, SourceState&, TargetState&)
+    void operator()(const Event& evt, Fsm& sm, SourceState&, TargetState&)
     {
-        ++sm.counter;
+        sm.counter += evt.data;
+    }
+};
+
+template<int Index>
+struct internal_transition_action
+{
+    template<class Event, class Fsm, class SourceState, class TargetState>
+    void operator()(const Event& evt, Fsm& sm, SourceState&, TargetState&)
+    {
+        sm.counter += evt.data;
     }
 };
 
@@ -41,9 +57,9 @@ template<int Index>
 struct guard
 {
     template<class Event, class Fsm, class SourceState, class TargetState>
-    bool operator()(const Event& event, Fsm& sm, SourceState&, TargetState&)
+    bool operator()(const Event& evt, Fsm& sm, SourceState&, TargetState&)
     {
-        return event.data >= 0;
+        return evt.data >= 0;
     }
 };
 
@@ -54,7 +70,8 @@ struct fsm_: public msm::front::state_machine_def<fsm_>
     struct transition_table: mpl::vector
     <
 #define X(N) \
-        COMMA_IF_NOT_0(N) Row<state_tpl<N>, event<N>, state_tpl<(N + 1) % PROBLEM_SIZE>, action<N>, guard<N>>
+        COMMA_IF_NOT_0(N) Row<state_tpl<N>, state_transition_event<N>, state_tpl<(N + 1) % PROBLEM_SIZE>, state_transition_action<N>, guard<N>> \
+        , Row<state_tpl<N>, internal_transition_event<N>, none, internal_transition_action<N>>
         COUNTER
 #undef X
     >{};
@@ -73,7 +90,8 @@ int test()
     for(auto i = 0; i < test_loop_size; ++i)
     {
 #define X(N) \
-    sm.process_event(event<N>{});
+    sm.process_event(internal_transition_event<N>{}); \
+    sm.process_event(state_transition_event<N>{});
         COUNTER
 #undef X
     }

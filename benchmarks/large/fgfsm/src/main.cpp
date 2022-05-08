@@ -13,20 +13,37 @@ struct context
 };
 
 template<int Index>
-struct state{};
-
-template<int Index>
-struct event
+struct state_transition_event
 {
-    int data = 0;
+    int data = 1;
 };
 
 template<int Index>
-struct action
+struct internal_transition_event
 {
-    void execute()
+    int data = 1;
+};
+
+template<int Index>
+struct state
+{
+    void on_entry(){}
+    void on_exit(){}
+
+    void on_event(const internal_transition_event<Index>& evt)
     {
-        ++ctx.counter;
+        ctx.counter += evt.data;
+    }
+
+    context& ctx;
+};
+
+template<int Index>
+struct state_transition_action
+{
+    void execute(const state_transition_event<Index>& evt)
+    {
+        ctx.counter += evt.data;
     }
 
     context& ctx;
@@ -35,7 +52,7 @@ struct action
 template<int Index>
 struct guard
 {
-    bool check(const event<Index>& evt)
+    bool check(const state_transition_event<Index>& evt)
     {
         return evt.data >= 0;
     }
@@ -46,16 +63,10 @@ struct fsm_configuration: fgfsm::fsm_configuration
     using transition_table = fgfsm::transition_table
     <
 #define X(N) \
-        COMMA_IF_NOT_0(N) fgfsm::row<state<N>, event<N>, state<(N + 1) % PROBLEM_SIZE>, action<N>, guard<N>>
+        COMMA_IF_NOT_0(N) fgfsm::row<state<N>, state_transition_event<N>, state<(N + 1) % PROBLEM_SIZE>, state_transition_action<N>, guard<N>>
         COUNTER
 #undef X
     >;
-
-    //We don't need run-to-completion in this use case but we enable it to be
-    //fair with Boost.MSM, which can't disable it AFAIK.
-    static constexpr auto enable_run_to_completion = true;
-
-    static constexpr auto enable_in_state_internal_transitions = false;
 };
 
 using fsm = fgfsm::fsm<fsm_configuration>;
@@ -68,7 +79,8 @@ int test()
     for(auto i = 0; i < test_loop_size; ++i)
     {
 #define X(N) \
-    sm.process_event(event<N>{});
+    sm.process_event(internal_transition_event<N>{}); \
+    sm.process_event(state_transition_event<N>{});
         COUNTER
 #undef X
     }

@@ -4,6 +4,7 @@ This repository aims to benchmark various C++ FSM (Finite State Machine) librari
 
 ## Results
 
+<!---
 ### Visual Studio
 
 * Hardware: Intel i7 8850H, 32.0 GiB RAM
@@ -14,6 +15,7 @@ This repository aims to benchmark various C++ FSM (Finite State Machine) librari
 |--|--|--|--
 | **FGFSM** 0.3.0 | 0.756 s | 1.157 s | 13824 B
 | **[Boost::ext].SML** 1.1.5 | 4.204 s | 1.405 s | 30720 B
+--->
 
 ### GCC
 
@@ -23,27 +25,37 @@ This repository aims to benchmark various C++ FSM (Finite State Machine) librari
 
 | | Build time | Execution time | Binary size
 |--|--:|--:|--:|
-| **Boost.MSM**  | 42.397 s | 0.569 s | 650.6 kB
-| **FGFSM** 0.3.3 | 4.795 s | 0.114 s | 76.3 kB
-| **[Boost::ext].SML** v1.1.5 | 2.823 s | 0.187 s | 335.6 kB
+| **Boost.MSM**  | 30.166 s | 0.568 s | 572.4 kB
+| **FGFSM** 0.3.3 | 6.840 s | 0.108 s | 79.8 kB
+| **[Boost::ext].SML** v1.1.5 | 2.629 s | 0.173 s | 289.3 kB
 
 ## The Test
 
 The repository defines one program per library. Each program must implement, using its assigned library, the test described below.
 
-The test consists of:
+The test tries to mimic a real-life large FSM. It consists of:
 
 * a counter (under the form of an `int` variable);
 * a large FSM:
-  * which defines 50 states, 50 event types, 50 actions and 50 guards;
+  * which defines:
+    * 25 states (*state<sub>0</sub>* to *state<sub>24</sub>*);
+    * 25 event types for state transitions (*sevent<sub>0</sub>* to *sevent<sub>24</sub>*);
+    * 25 event types for internal transitions (*ievent<sub>0</sub>* to *ievent<sub>24</sub>*);
+    * 25 actions for state transitions (*saction<sub>0</sub>* to *saction<sub>24</sub>*);
+    * 25 actions for internal transitions (*iaction<sub>0</sub>* to *iaction<sub>24</sub>*);
+    * 25 guards;
   * whose initial state is *state<sub>0</sub>*;
-  * which transitions from *state<sub>n</sub>* to *state<sub>(n+1)%50</sub>* and executes *action<sub>n</sub>* whenever it receives *event<sub>n</sub>* and *guard<sub>n</sub>* returns true;
-  * whose all events contain a `int` data whose value is `0`;
-  * whose all actions increment the counter;
+  * which transitions from *state<sub>n</sub>* to *state<sub>(n+1)%25</sub>* and executes *saction<sub>n</sub>* whenever it receives *sevent<sub>n</sub>* and *guard<sub>n</sub>* returns true;
+  * whose *state<sub>n</sub>* executes *iaction<sub>n</sub>* whenever it receives *ievent<sub>n</sub>*;
+  * whose all events contain a `int` data whose value is `1`;
+  * whose all actions add the event data to the counter (effectively incrementing the counter);
   * whose all guards check that the event data is positive (effectively returning `true` every time);
 * a `test()` function that:
   * creates the counter;
   * creates the FSM;
-  * makes the FSM perform 50 state transitions from *state<sub>0</sub>* to *state<sub>49</sub>* and back to *state<sub>0</sub>*, 1000 times;
+  * makes the FSM perform 25 state transitions from *state<sub>0</sub>* to *state<sub>24</sub>* and back to *state<sub>0</sub>*, 1000 times;
+  * makes the FSM perform 25 internal transitions (one per state), 1000 times;
   * returns the value of the counter;
 * a `main()` function that calls the `test()` function 1000 times and checks that the counter has the expected value.
+
+Also, each program is required to enable run-to-completion (as most real-life applications do), even if this use case doesn't actually require it. This implies that FSM libraries that don't support run-to-completion can't take part in this benchmark.
