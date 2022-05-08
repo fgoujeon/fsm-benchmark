@@ -9,7 +9,7 @@
 
 struct context
 {
-    int side_effect = 0;
+    int counter = 0;
 };
 
 template<int Index>
@@ -26,7 +26,7 @@ struct action
 {
     void execute()
     {
-        ++ctx.side_effect;
+        ++ctx.counter;
     }
 
     context& ctx;
@@ -46,13 +46,15 @@ struct fsm_configuration: fgfsm::fsm_configuration
     using transition_table = fgfsm::transition_table
     <
 #define X(N) \
-        COMMA_IF_NOT_0(N) fgfsm::row<state<N>, event<N>, state<(N + 1) % 50>, action<N>, guard<N>>
-        COUNTER_50
+        COMMA_IF_NOT_0(N) fgfsm::row<state<N>, event<N>, state<(N + 1) % PROBLEM_SIZE>, action<N>, guard<N>>
+        COUNTER
 #undef X
     >;
 
-    //Disable features to be on-par with sml
-    static constexpr auto enable_run_to_completion = false;
+    //We don't need run-to-completion in this use case but we enable it to be
+    //fair with Boost.MSM, which can't disable it AFAIK.
+    static constexpr auto enable_run_to_completion = true;
+
     static constexpr auto enable_in_state_internal_transitions = false;
 };
 
@@ -63,13 +65,13 @@ int test()
     auto ctx = context{};
     auto sm = fsm{ctx};
 
-    for(auto i = 0; i < 1000; ++i)
+    for(auto i = 0; i < test_loop_size; ++i)
     {
 #define X(N) \
     sm.process_event(event<N>{});
-        COUNTER_50
+        COUNTER
 #undef X
     }
 
-    return ctx.side_effect;
+    return ctx.counter;
 }

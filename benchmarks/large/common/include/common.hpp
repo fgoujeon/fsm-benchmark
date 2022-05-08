@@ -4,7 +4,9 @@
 //https://www.boost.org/LICENSE_1_0.txt)
 //Official repository: https://github.com/fgoujeon/fsm-benchmark
 
-#define COUNTER_50 \
+#define PROBLEM_SIZE 50
+
+#define COUNTER \
     X(0) \
     X(1) \
     X(2) \
@@ -109,18 +111,22 @@
 
 #define COMMA_IF_NOT_0(N) COMMA_##N
 
+constexpr auto test_loop_size = 1000;
+
 int test();
 
 int main()
 {
-    auto side_effect = 0;
+    constexpr auto main_loop_size = 1000;
 
-    for(auto i = 0; i < 1000; ++i)
+    auto counter = 0;
+
+    for(auto i = 0; i < main_loop_size; ++i)
     {
-        side_effect += test();
+        counter += test();
     }
 
-    if(side_effect != 50'000'000)
+    if(counter != PROBLEM_SIZE * test_loop_size * main_loop_size)
         return 1;
 
     return 0;

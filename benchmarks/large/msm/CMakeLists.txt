@@ -6,12 +6,15 @@
 
 cmake_minimum_required(VERSION 3.10)
 
-project(fsm-benchmark)
+set(TARGET large-msm)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+file(GLOB_RECURSE SOURCE_FILES *)
+source_group(TREE ${CMAKE_CURRENT_LIST_DIR} FILES ${SOURCE_FILES})
+add_executable(${TARGET} ${SOURCE_FILES})
 
-find_package(Boost 1.64.0 REQUIRED)
-
-add_subdirectory(benchmarks)
-add_subdirectory(libraries/fgfsm)
-add_subdirectory(libraries/sml)
+target_link_libraries(
+    ${TARGET}
+    PRIVATE
+        large-common
+        Boost::boost
+)

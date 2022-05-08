@@ -6,10 +6,11 @@
 
 #include "common.hpp"
 #include <boost/sml.hpp>
+#include <queue>
 
 struct context
 {
-    int side_effect = 0;
+    int counter = 0;
 };
 
 template<int Index>
@@ -29,7 +30,7 @@ struct action
 {
     void operator()(context& ctx)
     {
-        ++ctx.side_effect;
+        ++ctx.counter;
     }
 };
 
@@ -52,25 +53,34 @@ struct large
         return make_transition_table
         (
 #define X(N) \
-    COMMA_IF_NOT_0(N) state<state_tpl<N>> + event<event_tpl<N>> [guard<N>{}] / action<N>{} = state<state_tpl<(N + 1) % 50>>
-            *COUNTER_50
+    COMMA_IF_NOT_0(N) state<state_tpl<N>> + event<event_tpl<N>> [guard<N>{}] / action<N>{} = state<state_tpl<(N + 1) % PROBLEM_SIZE>>
+            *COUNTER
 #undef X
         );
     }
 };
 
+using fsm = boost::sml::sm
+<
+    large,
+
+    //We don't need run-to-completion in this use case but we enable it to be
+    //fair with Boost.MSM, which can't disable it AFAIK.
+    boost::sml::process_queue<std::queue>
+>;
+
 int test()
 {
     auto ctx = context{};
-    auto sm = boost::sml::sm<large>{ctx};
+    auto sm = fsm{ctx};
 
-    for(auto i = 0; i < 1000; ++i)
+    for(auto i = 0; i < test_loop_size; ++i)
     {
 #define X(N) \
     sm.process_event(event_tpl<N>{});
-        COUNTER_50
+        COUNTER
 #undef X
     }
 
-    return ctx.side_effect;
+    return ctx.counter;
 }
