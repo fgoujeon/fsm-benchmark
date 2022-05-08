@@ -63,10 +63,13 @@ int test()
     auto ctx = context{};
     auto sm = fsm{ctx};
 
+    for(auto i = 0; i < 1000; ++i)
+    {
 #define X(N) \
     sm.process_event(event<N>{});
-    COUNTER_50
+        COUNTER_50
 #undef X
+    }
 
     return ctx.side_effect;
 }

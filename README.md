@@ -1,6 +1,6 @@
 This repository aims to benchmark various C++ FSM (Finite State Machine) libraries.
 
-**Disclaimer: I'm the author of FGFSM.** Obviously, I've tried my best to make the test as fair as possible for every library. Please feel free to check the implementations and contact me if something has to be fixed.
+**Disclaimer: I'm the author of FGFSM.** Obviously, I've tried my best to make the test as fair as possible for every library. However, since I'm only an expert in my own library, I might have done mistakes. Please feel free to check the implementations and contact me if something has to be fixed.
 
 ## Results
 
@@ -23,8 +23,8 @@ This repository aims to benchmark various C++ FSM (Finite State Machine) librari
 
 | | Build time | Execution time | Binary size
 |--|--|--|--
-| **FGFSM** 0.3.3 | 3.213 s | 0.002 s | 15784 B
-| **[Boost::ext].SML** v1.1.5 | 1.723 s | 0.128 s | 165856 B
+| **FGFSM** 0.3.3 | 3.235 s | 0.002 s | 15784 B
+| **[Boost::ext].SML** v1.1.5 | 1.719 s | 0.136 s | 172176 B
 
 ## The Test
 
@@ -43,6 +43,6 @@ The test consists of:
 * a `test()` function that:
   * creates the counter;
   * creates the FSM;
-  * makes the FSM perform 50 state transitions from *state<sub>0</sub>* to *state<sub>49</sub>* and back to *state<sub>0</sub>*;
+  * makes the FSM perform 50 state transitions from *state<sub>0</sub>* to *state<sub>49</sub>* and back to *state<sub>0</sub>*, 1000 times;
   * returns the value of the counter;
-* a `main()` function that calls the `test()` function 10 million times and checks that the counter has the expected value.
+* a `main()` function that calls the `test()` function 1000 times and checks that the counter has the expected value.

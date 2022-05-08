@@ -64,10 +64,13 @@ int test()
     auto ctx = context{};
     auto sm = boost::sml::sm<large>{ctx};
 
+    for(auto i = 0; i < 1000; ++i)
+    {
 #define X(N) \
     sm.process_event(event_tpl<N>{});
-    COUNTER_50
+        COUNTER_50
 #undef X
+    }
 
     return ctx.side_effect;
 }

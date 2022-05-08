@@ -115,7 +115,7 @@ int main()
 {
     auto side_effect = 0;
 
-    for(auto i = 0; i < 1'000'000; ++i)
+    for(auto i = 0; i < 1000; ++i)
     {
         side_effect += test();
     }
