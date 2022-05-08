@@ -12,6 +12,12 @@ file(GLOB_RECURSE SOURCE_FILES *)
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR} FILES ${SOURCE_FILES})
 add_executable(${TARGET} ${SOURCE_FILES})
 
+target_include_directories(
+    ${TARGET}
+    PRIVATE
+        include
+)
+
 target_link_libraries(
     ${TARGET}
     PRIVATE
