@@ -4,7 +4,6 @@ This repository aims to benchmark various C++ FSM (Finite State Machine) librari
 
 ## Results
 
-<!---
 ### Visual Studio
 
 * Hardware: Intel i7 8850H, 32.0 GiB RAM
@@ -12,10 +11,10 @@ This repository aims to benchmark various C++ FSM (Finite State Machine) librari
 * Compiler: Visual Studio 2017
 
 | | Build time | Execution time | Binary size
-|--|--|--|--
-| **FGFSM** 0.3.0 | 0.756 s | 1.157 s | 13824 B
-| **[Boost::ext].SML** 1.1.5 | 4.204 s | 1.405 s | 30720 B
---->
+|--|--:|--:|--:|
+| **Boost.MSM**  | 28.100 s | 1.463 s | 87.5 kB
+| **FGFSM** 0.3.4 | 3.355 s | 2.550 s | 54.5 kB
+| **[Boost::ext].SML** v1.1.5 | 4.078 s | 1.744 s | 53.0 kB
 
 ### GCC
 
@@ -25,9 +24,9 @@ This repository aims to benchmark various C++ FSM (Finite State Machine) librari
 
 | | Build time | Execution time | Binary size
 |--|--:|--:|--:|
-| **Boost.MSM**  | 126.965 s | 1.828 s | 2334.3 kB
-| **FGFSM** 0.3.4 | 8.133 s | 0.625 s | 168.2 kB
-| **[Boost::ext].SML** v1.1.5 | 5.592 s | 0.457 s | 928.4 kB
+| **Boost.MSM**  | 29.753 s | 0.561 s | 572.4 kB
+| **FGFSM** 0.3.4 | 3.132 s | 0.110 s | 80.0 kB
+| **[Boost::ext].SML** v1.1.5 | 2.530 s | 0.164 s | 289.3 kB
 
 ## The Test
 
