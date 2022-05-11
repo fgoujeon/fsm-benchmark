@@ -4,8 +4,8 @@
 //https://www.boost.org/LICENSE_1_0.txt)
 //Official repository: https://github.com/fgoujeon/fsm-benchmark
 
-#define PROBLEM_SIZE 50
-#define PROBLEM_SIZE_X_2 100
+#define PROBLEM_SIZE 25
+#define PROBLEM_SIZE_X_2 50
 
 #define COUNTER \
     X(0) \
@@ -32,32 +32,7 @@
     X(21) \
     X(22) \
     X(23) \
-    X(24) \
-    X(25) \
-    X(26) \
-    X(27) \
-    X(28) \
-    X(29) \
-    X(30) \
-    X(31) \
-    X(32) \
-    X(33) \
-    X(34) \
-    X(35) \
-    X(36) \
-    X(37) \
-    X(38) \
-    X(39) \
-    X(40) \
-    X(41) \
-    X(42) \
-    X(43) \
-    X(44) \
-    X(45) \
-    X(46) \
-    X(47) \
-    X(48) \
-    X(49)
+    X(24)
 
 #define COMMA_0
 #define COMMA_1  ,
@@ -84,31 +59,6 @@
 #define COMMA_22 ,
 #define COMMA_23 ,
 #define COMMA_24 ,
-#define COMMA_25 ,
-#define COMMA_26 ,
-#define COMMA_27 ,
-#define COMMA_28 ,
-#define COMMA_29 ,
-#define COMMA_30 ,
-#define COMMA_31 ,
-#define COMMA_32 ,
-#define COMMA_33 ,
-#define COMMA_34 ,
-#define COMMA_35 ,
-#define COMMA_36 ,
-#define COMMA_37 ,
-#define COMMA_38 ,
-#define COMMA_39 ,
-#define COMMA_40 ,
-#define COMMA_41 ,
-#define COMMA_42 ,
-#define COMMA_43 ,
-#define COMMA_44 ,
-#define COMMA_45 ,
-#define COMMA_46 ,
-#define COMMA_47 ,
-#define COMMA_48 ,
-#define COMMA_49 ,
 
 #define COMMA_IF_NOT_0(N) COMMA_##N
 
