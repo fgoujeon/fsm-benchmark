@@ -37,14 +37,14 @@ The test tries to mimic a real-life large FSM. It consists of:
 * a counter (under the form of an `int` variable);
 * a large FSM:
   * which defines:
-    * 50 states (*state<sub>0</sub>* to *state<sub>49</sub>*);
-    * 50 event types for state transitions (*sevent<sub>0</sub>* to *sevent<sub>49</sub>*);
-    * 50 event types for internal transitions (*ievent<sub>0</sub>* to *ievent<sub>49</sub>*);
-    * 50 actions for state transitions (*saction<sub>0</sub>* to *saction<sub>49</sub>*);
-    * 50 actions for internal transitions (*iaction<sub>0</sub>* to *iaction<sub>49</sub>*);
-    * 50 guards;
+    * 25 states (*state<sub>0</sub>* to *state<sub>24</sub>*);
+    * 25 event types for state transitions (*sevent<sub>0</sub>* to *sevent<sub>24</sub>*);
+    * 25 event types for internal transitions (*ievent<sub>0</sub>* to *ievent<sub>24</sub>*);
+    * 25 actions for state transitions (*saction<sub>0</sub>* to *saction<sub>24</sub>*);
+    * 25 actions for internal transitions (*iaction<sub>0</sub>* to *iaction<sub>24</sub>*);
+    * 25 guards;
   * whose initial state is *state<sub>0</sub>*;
-  * which transitions from *state<sub>n</sub>* to *state<sub>(n+1)%50</sub>* and executes *saction<sub>n</sub>* whenever it receives *sevent<sub>n</sub>* and *guard<sub>n</sub>* returns true;
+  * which transitions from *state<sub>n</sub>* to *state<sub>(n+1)%25</sub>* and executes *saction<sub>n</sub>* whenever it receives *sevent<sub>n</sub>* and *guard<sub>n</sub>* returns true;
   * whose *state<sub>n</sub>* executes *iaction<sub>n</sub>* whenever it receives *ievent<sub>n</sub>*;
   * whose all events contain a `int` data whose value is `1`;
   * whose all actions add the event data to the counter (effectively incrementing the counter);
@@ -52,8 +52,8 @@ The test tries to mimic a real-life large FSM. It consists of:
 * a `test()` function that:
   * creates the counter;
   * creates the FSM;
-  * makes the FSM perform 50 state transitions from *state<sub>0</sub>* to *state<sub>49</sub>* and back to *state<sub>0</sub>*, 1000 times;
-  * makes the FSM perform 50 internal transitions (one per state), 1000 times;
+  * makes the FSM perform 25 state transitions from *state<sub>0</sub>* to *state<sub>24</sub>* and back to *state<sub>0</sub>*, 1000 times;
+  * makes the FSM perform 25 internal transitions (one per state), 1000 times;
   * returns the value of the counter;
 * a `main()` function that calls the `test()` function 1000 times and checks that the counter has the expected value.
 
