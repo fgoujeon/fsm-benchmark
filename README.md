@@ -4,7 +4,6 @@ This repository aims to benchmark various C++ FSM (Finite State Machine) librari
 
 ## Results
 
-<!---
 ### Visual Studio
 
 * Hardware: Intel i7 8850H, 32.0 GiB RAM
@@ -12,10 +11,10 @@ This repository aims to benchmark various C++ FSM (Finite State Machine) librari
 * Compiler: Visual Studio 2017
 
 | | Build time | Execution time | Binary size
-|--|--|--|--
-| **FGFSM** 0.3.0 | 0.756 s | 1.157 s | 13824 B
-| **[Boost::ext].SML** 1.1.5 | 4.204 s | 1.405 s | 30720 B
---->
+|--|--:|--:|--:|
+| **Boost.MSM**  | 28.100 s | 1.463 s | 87.5 kB
+| **FGFSM** 0.3.4 | 3.355 s | 2.550 s | 54.5 kB
+| **[Boost::ext].SML** v1.1.5 | 4.078 s | 1.744 s | 53.0 kB
 
 ### GCC
 
@@ -25,9 +24,9 @@ This repository aims to benchmark various C++ FSM (Finite State Machine) librari
 
 | | Build time | Execution time | Binary size
 |--|--:|--:|--:|
-| **Boost.MSM**  | 126.965 s | 1.828 s | 2334.3 kB
-| **FGFSM** 0.3.4 | 8.133 s | 0.625 s | 168.2 kB
-| **[Boost::ext].SML** v1.1.5 | 5.592 s | 0.457 s | 928.4 kB
+| **Boost.MSM**  | 29.753 s | 0.561 s | 572.4 kB
+| **FGFSM** 0.3.4 | 3.132 s | 0.110 s | 80.0 kB
+| **[Boost::ext].SML** v1.1.5 | 2.530 s | 0.164 s | 289.3 kB
 
 ## The Test
 
@@ -38,14 +37,14 @@ The test tries to mimic a real-life large FSM. It consists of:
 * a counter (under the form of an `int` variable);
 * a large FSM:
   * which defines:
-    * 50 states (*state<sub>0</sub>* to *state<sub>49</sub>*);
-    * 50 event types for state transitions (*sevent<sub>0</sub>* to *sevent<sub>49</sub>*);
-    * 50 event types for internal transitions (*ievent<sub>0</sub>* to *ievent<sub>49</sub>*);
-    * 50 actions for state transitions (*saction<sub>0</sub>* to *saction<sub>49</sub>*);
-    * 50 actions for internal transitions (*iaction<sub>0</sub>* to *iaction<sub>49</sub>*);
-    * 50 guards;
+    * 25 states (*state<sub>0</sub>* to *state<sub>24</sub>*);
+    * 25 event types for state transitions (*sevent<sub>0</sub>* to *sevent<sub>24</sub>*);
+    * 25 event types for internal transitions (*ievent<sub>0</sub>* to *ievent<sub>24</sub>*);
+    * 25 actions for state transitions (*saction<sub>0</sub>* to *saction<sub>24</sub>*);
+    * 25 actions for internal transitions (*iaction<sub>0</sub>* to *iaction<sub>24</sub>*);
+    * 25 guards;
   * whose initial state is *state<sub>0</sub>*;
-  * which transitions from *state<sub>n</sub>* to *state<sub>(n+1)%50</sub>* and executes *saction<sub>n</sub>* whenever it receives *sevent<sub>n</sub>* and *guard<sub>n</sub>* returns true;
+  * which transitions from *state<sub>n</sub>* to *state<sub>(n+1)%25</sub>* and executes *saction<sub>n</sub>* whenever it receives *sevent<sub>n</sub>* and *guard<sub>n</sub>* returns true;
   * whose *state<sub>n</sub>* executes *iaction<sub>n</sub>* whenever it receives *ievent<sub>n</sub>*;
   * whose all events contain a `int` data whose value is `1`;
   * whose all actions add the event data to the counter (effectively incrementing the counter);
@@ -53,8 +52,8 @@ The test tries to mimic a real-life large FSM. It consists of:
 * a `test()` function that:
   * creates the counter;
   * creates the FSM;
-  * makes the FSM perform 50 state transitions from *state<sub>0</sub>* to *state<sub>49</sub>* and back to *state<sub>0</sub>*, 1000 times;
-  * makes the FSM perform 50 internal transitions (one per state), 1000 times;
+  * makes the FSM perform 25 state transitions from *state<sub>0</sub>* to *state<sub>24</sub>* and back to *state<sub>0</sub>*, 1000 times;
+  * makes the FSM perform 25 internal transitions (one per state), 1000 times;
   * returns the value of the counter;
 * a `main()` function that calls the `test()` function 1000 times and checks that the counter has the expected value.
 
