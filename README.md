@@ -12,9 +12,9 @@ This repository aims to benchmark various C++ FSM (Finite State Machine) librari
 
 | | Build time | Execution time | Binary size
 |--|--:|--:|--:|
-| **Boost.MSM**  | 28.100 s | 1.463 s | 87.5 kB
-| **FGFSM** 0.3.4 | 3.355 s | 2.550 s | 54.5 kB
-| **[Boost::ext].SML** v1.1.5 | 4.078 s | 1.744 s | 53.0 kB
+| **Boost.MSM**  | 28.565 s | 1.653 s | 87.5 kB
+| **FGFSM** 0.3.5 | 3.095 s | 2.042 s | 39.0 kB
+| **[Boost::ext].SML** v1.1.5 | 4.396 s | 2.045 s | 53.0 kB
 
 ### GCC
 
@@ -24,9 +24,9 @@ This repository aims to benchmark various C++ FSM (Finite State Machine) librari
 
 | | Build time | Execution time | Binary size
 |--|--:|--:|--:|
-| **Boost.MSM**  | 29.753 s | 0.561 s | 572.4 kB
-| **FGFSM** 0.3.4 | 3.132 s | 0.110 s | 80.0 kB
-| **[Boost::ext].SML** v1.1.5 | 2.530 s | 0.164 s | 289.3 kB
+| **Boost.MSM**  | 29.928 s | 0.547 s | 572.4 kB
+| **FGFSM** 0.3.5 | 2.647 s | 0.112 s | 56.3 kB
+| **[Boost::ext].SML** v1.1.5 | 2.554 s | 0.165 s | 289.3 kB
 
 ## The Test
 
