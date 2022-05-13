@@ -28,7 +28,6 @@ struct state_transition_event
     int data = 1;
 };
 
-template<int Index>
 struct internal_transition_event
 {
     int data = 1;
@@ -72,7 +71,7 @@ struct fsm_: public msm::front::state_machine_def<fsm_>
     <
 #define X(N) \
         COMMA_IF_NOT_0(N) Row<state_tpl<N>, state_transition_event<N>, state_tpl<(N + 1) % PROBLEM_SIZE>, state_transition_action<N>, guard<N>> \
-        , Row<state_tpl<N>, internal_transition_event<N>, none, internal_transition_action<N>>
+        , Row<state_tpl<N>, internal_transition_event, none, internal_transition_action<N>>
         COUNTER
 #undef X
     >{};
@@ -91,7 +90,7 @@ int test()
     for(auto i = 0; i < test_loop_size; ++i)
     {
 #define X(N) \
-    sm.process_event(internal_transition_event<N>{}); \
+    sm.process_event(internal_transition_event{}); \
     sm.process_event(state_transition_event<N>{});
         COUNTER
 #undef X

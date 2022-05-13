@@ -24,7 +24,6 @@ struct state_transition_event
     int data = 1;
 };
 
-template<int Index>
 struct internal_transition_event
 {
     int data = 1;
@@ -44,7 +43,7 @@ struct state_transition_action
 template<int Index>
 struct internal_transition_action
 {
-    void operator()(const internal_transition_event<Index>& evt, context& ctx)
+    void operator()(const internal_transition_event& evt, context& ctx)
     {
         ctx.counter += evt.data;
     }
@@ -70,7 +69,7 @@ struct large
         (
 #define X(N) \
     COMMA_IF_NOT_0(N) state<state_tpl<N>> + event<state_transition_event<N>> [guard<N>{}] / state_transition_action<N>{} = state<state_tpl<(N + 1) % PROBLEM_SIZE>> \
-    , state<state_tpl<N>> + event<internal_transition_event<N>> / internal_transition_action<N>{}
+    , state<state_tpl<N>> + event<internal_transition_event> / internal_transition_action<N>{}
             *COUNTER
 #undef X
         );
@@ -91,7 +90,7 @@ int test()
     for(auto i = 0; i < test_loop_size; ++i)
     {
 #define X(N) \
-    sm.process_event(internal_transition_event<N>{}); \
+    sm.process_event(internal_transition_event{}); \
     sm.process_event(state_transition_event<N>{});
         COUNTER
 #undef X
