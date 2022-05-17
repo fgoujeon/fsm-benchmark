@@ -18,11 +18,6 @@ namespace mpl = boost::mpl;
 using namespace msm::front;
 
 template<int Index>
-struct state_tpl: msm::front::state<>
-{
-};
-
-template<int Index>
 struct state_transition_event
 {
     int data = 1;
@@ -31,6 +26,16 @@ struct state_transition_event
 struct internal_transition_event
 {
     int data = 1;
+};
+
+template<int Index>
+struct state_tpl: msm::front::state<>
+{
+    template<class Event, class Fsm>
+    void on_entry(const Event& event, Fsm& fsm)
+    {
+        fsm.process_event(internal_transition_event{});
+    }
 };
 
 template<int Index>
@@ -90,11 +95,14 @@ int test()
     for(auto i = 0; i < test_loop_size; ++i)
     {
 #define X(N) \
-    sm.process_event(internal_transition_event{}); \
     sm.process_event(state_transition_event<N>{});
         COUNTER
 #undef X
     }
+
+    //The entry action of state0 is called by the constructor of the FSM, so we
+    //have to cancel what this action does.
+    --sm.counter;
 
     return sm.counter;
 }

@@ -51,6 +51,19 @@ struct internal_transition_action
 
 //Note: Using a constexpr lambda makes the build slightly slower (at least on GCC)
 template<int Index>
+struct entry_action
+{
+    void operator()
+    (
+        boost::sml::back::process<internal_transition_event> process
+    )
+    {
+        process(internal_transition_event{});
+    }
+};
+
+//Note: Using a constexpr lambda makes the build slightly slower (at least on GCC)
+template<int Index>
 struct guard
 {
     bool operator()(const state_transition_event<Index>& evt)
@@ -72,6 +85,11 @@ struct large
     , state<state_tpl<N>> + event<internal_transition_event> / internal_transition_action<N>{}
             *COUNTER
 #undef X
+
+#define X(N) \
+    , state<state_tpl<N>> + on_entry<_> / entry_action<N>{}
+            COUNTER
+#undef X
         );
     }
 };
@@ -90,11 +108,14 @@ int test()
     for(auto i = 0; i < test_loop_size; ++i)
     {
 #define X(N) \
-    sm.process_event(internal_transition_event{}); \
     sm.process_event(state_transition_event<N>{});
         COUNTER
 #undef X
     }
+
+    //The entry action of state0 is called by the constructor of the FSM, so we
+    //have to cancel what this action does.
+    --ctx.counter;
 
     return ctx.counter;
 }
