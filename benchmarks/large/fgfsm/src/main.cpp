@@ -18,7 +18,6 @@ struct state_transition_event
     int data = 1;
 };
 
-template<int Index>
 struct internal_transition_event
 {
     int data = 1;
@@ -27,15 +26,22 @@ struct internal_transition_event
 template<int Index>
 struct state
 {
-    void on_entry(){}
-    void on_exit(){}
+    void on_entry()
+    {
+        sm.process_event(internal_transition_event{});
+    }
 
-    void on_event(const internal_transition_event<Index>& evt)
+    void on_event(const internal_transition_event& evt)
     {
         ctx.counter += evt.data;
     }
 
+    void on_exit()
+    {
+    }
+
     context& ctx;
+    fgfsm::fsm_ref<internal_transition_event> sm;
 };
 
 template<int Index>
@@ -79,7 +85,6 @@ int test()
     for(auto i = 0; i < test_loop_size; ++i)
     {
 #define X(N) \
-    sm.process_event(internal_transition_event<N>{}); \
     sm.process_event(state_transition_event<N>{});
         COUNTER
 #undef X
