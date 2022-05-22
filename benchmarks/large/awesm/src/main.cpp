@@ -5,7 +5,7 @@
 //Official repository: https://github.com/fgoujeon/fsm-benchmark
 
 #include "common.hpp"
-#include <fgfsm.hpp>
+#include <awesm.hpp>
 
 struct context
 {
@@ -41,7 +41,7 @@ struct state
     }
 
     context& ctx;
-    fgfsm::fsm_ref<internal_transition_event> sm;
+    awesm::sm_ref<internal_transition_event> sm;
 };
 
 template<int Index>
@@ -64,23 +64,23 @@ struct guard
     }
 };
 
-struct fsm_configuration: fgfsm::fsm_configuration
+struct sm_configuration: awesm::sm_configuration
 {
-    using transition_table = fgfsm::transition_table
+    using transition_table = awesm::transition_table
     <
 #define X(N) \
-        COMMA_IF_NOT_0(N) fgfsm::row<state<N>, state_transition_event<N>, state<(N + 1) % PROBLEM_SIZE>, state_transition_action<N>, guard<N>>
+        COMMA_IF_NOT_0(N) awesm::row<state<N>, state_transition_event<N>, state<(N + 1) % PROBLEM_SIZE>, state_transition_action<N>, guard<N>>
         COUNTER
 #undef X
     >;
 };
 
-using fsm = fgfsm::fsm<fsm_configuration>;
+using sm_t = awesm::sm<sm_configuration>;
 
 int test()
 {
     auto ctx = context{};
-    auto sm = fsm{ctx};
+    auto sm = sm_t{ctx};
 
     for(auto i = 0; i < test_loop_size; ++i)
     {

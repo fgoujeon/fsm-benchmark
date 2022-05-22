@@ -1,6 +1,6 @@
 This repository aims to benchmark various C++ FSM (Finite State Machine) libraries.
 
-**Disclaimer: I'm the author of FGFSM.** Obviously, I've tried my best to make the test as fair as possible for every library. However, since I'm only an expert in my own library, I might have done mistakes. Please feel free to check the implementations and contact me if something has to be fixed.
+**Disclaimer: I'm the author of AweSM.** Obviously, I've tried my best to make the test as fair as possible for every library. However, since I'm only an expert in my own library, I might have done mistakes. Please feel free to check the implementations and contact me if something has to be fixed.
 
 ## Results
 
@@ -12,8 +12,8 @@ This repository aims to benchmark various C++ FSM (Finite State Machine) librari
 
 | | Build time | Execution time | Binary size
 |--|--:|--:|--:|
+| **AweSM** 0.3.8 | 2.548 s | 2.183 s | 37.0 KiB
 | **Boost.MSM**  | 20.946 s | 2.157 s | 54.5 KiB
-| **FGFSM** 0.3.7 | 2.548 s | 2.183 s | 37.0 KiB
 | **[Boost::ext].SML** v1.1.5 | 5.011 s | 2.227 s | 36.0 KiB
 
 ### GCC
@@ -24,8 +24,8 @@ This repository aims to benchmark various C++ FSM (Finite State Machine) librari
 
 | | Build time | Execution time | Binary size
 |--|--:|--:|--:|
+| **AweSM** 0.3.8 | 2.666 s | 0.514 s | 61.8 KiB
 | **Boost.MSM**  | 20.543 s | 2.511 s | 316.7 KiB
-| **FGFSM** 0.3.7 | 2.666 s | 0.514 s | 61.8 KiB
 | **[Boost::ext].SML** v1.1.5 | 5.795 s | 0.586 s | 589.3 KiB
 
 ## The Test

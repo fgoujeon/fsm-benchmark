@@ -93,8 +93,8 @@ subprocess.run(["cmake", "--build", build_dir, "--target", "clean"])
 
 #Run tests
 results = [
+    test("AweSM", "awesm"),
     test("Boost.MSM", "msm"),
-    test("FGFSM", "fgfsm"),
     test("[Boost::ext].SML", "sml")]
 
 #Print test results in markdown format

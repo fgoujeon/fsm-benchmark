@@ -6,7 +6,7 @@
 
 cmake_minimum_required(VERSION 3.10)
 
-set(TARGET large-fgfsm)
+set(TARGET large-awesm)
 
 file(GLOB_RECURSE SOURCE_FILES *)
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR} FILES ${SOURCE_FILES})
@@ -21,5 +21,5 @@ target_link_libraries(
     ${TARGET}
     PRIVATE
         large-common
-        fgfsm
+        awesm
 )
