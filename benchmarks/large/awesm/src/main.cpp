@@ -40,8 +40,8 @@ struct state
     {
     }
 
-    context& ctx;
     awesm::sm_ref<internal_transition_event> sm;
+    context& ctx;
 };
 
 template<int Index>
@@ -64,7 +64,7 @@ struct guard
     }
 };
 
-struct sm_configuration: awesm::sm_configuration
+struct sm_configuration: awesm::simple_sm_configuration
 {
     using transition_table = awesm::transition_table
     <
@@ -75,7 +75,7 @@ struct sm_configuration: awesm::sm_configuration
     >;
 };
 
-using sm_t = awesm::sm<sm_configuration>;
+using sm_t = awesm::simple_sm<sm_configuration>;
 
 int test()
 {
