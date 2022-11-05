@@ -81,7 +81,8 @@ int main()
         PROBLEM_SIZE *
         test_loop_size *
         main_loop_size *
-        2 //internal transition + state transition
+        2 + //internal transition + state transition
+        test_loop_size //entry action of first state
     ;
 
     if(counter != expected_counter)

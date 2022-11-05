@@ -113,9 +113,5 @@ int test()
 #undef X
     }
 
-    //The entry action of state0 is called by the constructor of the FSM, so we
-    //have to cancel what this action does.
-    --ctx.counter;
-
     return ctx.counter;
 }
