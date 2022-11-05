@@ -40,8 +40,8 @@ struct state
     {
     }
 
-    context& ctx;
     awesm::sm_ref<internal_transition_event> sm;
+    context& ctx;
 };
 
 template<int Index>
@@ -64,23 +64,27 @@ struct guard
     }
 };
 
-struct sm_configuration: awesm::sm_configuration
-{
-    using transition_table = awesm::transition_table
-    <
+using sm_transition_table = awesm::transition_table
+<
 #define X(N) \
-        COMMA_IF_NOT_0(N) awesm::row<state<N>, state_transition_event<N>, state<(N + 1) % PROBLEM_SIZE>, state_transition_action<N>, guard<N>>
-        COUNTER
+    COMMA_IF_NOT_0(N) awesm::row<state<N>, state_transition_event<N>, state<(N + 1) % PROBLEM_SIZE>, state_transition_action<N>, guard<N>>
+    COUNTER
 #undef X
-    >;
+>;
+
+struct sm_def
+{
+    using conf = awesm::sm_conf<sm_transition_table>;
 };
 
-using sm_t = awesm::sm<sm_configuration>;
+using sm_t = awesm::sm<sm_def>;
 
 int test()
 {
     auto ctx = context{};
     auto sm = sm_t{ctx};
+
+    sm.start();
 
     for(auto i = 0; i < test_loop_size; ++i)
     {
