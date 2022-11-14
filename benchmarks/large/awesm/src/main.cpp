@@ -26,6 +26,12 @@ struct internal_transition_event
 template<int Index>
 struct state
 {
+    using conf = awesm::state_conf
+    <
+        awesm::state_options::on_entry_any,
+        awesm::state_options::on_event_any_of<internal_transition_event>
+    >;
+
     void on_entry()
     {
         sm.process_event(internal_transition_event{});
@@ -34,10 +40,6 @@ struct state
     void on_event(const internal_transition_event& evt)
     {
         ctx.counter += evt.data;
-    }
-
-    void on_exit()
-    {
     }
 
     awesm::sm_ref<internal_transition_event> sm;
