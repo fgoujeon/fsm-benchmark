@@ -12,21 +12,21 @@ This repository aims to benchmark various C++ FSM (Finite State Machine) librari
 
 | | Build time | Execution time | Binary size
 |--|--:|--:|--:|
-| **AweSM** 0.3.12 | 4.299 s | 2.261 s | 45.5 KiB
-| **Boost.MSM**  | 22.227 s | 2.036 s | 54.5 KiB
-| **[Boost::ext].SML** v1.1.5 | 5.457 s | 2.098 s | 36.0 KiB
+| **AweSM** 0.3.13 | 4.868 s | 2.367 s | 45.0 KiB
+| **Boost.MSM**  | 21.979 s | 2.095 s | 54.5 KiB
+| **[Boost::ext].SML** v1.1.5 | 6.198 s | 2.143 s | 36.0 KiB
 
 ### GCC
 
 * Hardware: Intel i5 750, 9.7 GiB RAM
-* System: Arch Linux 5.17.9-arch1-1
-* Compiler: GCC 12.1.0
+* System: Arch Linux 6.0.9-arch1-1
+* Compiler: GCC 12.2.0
 
 | | Build time | Execution time | Binary size
 |--|--:|--:|--:|
-| **AweSM** 0.3.12 | 4.356 s | 0.537 s | 103.1 KiB
-| **Boost.MSM**  | 21.764 s | 2.417 s | 321.2 KiB
-| **[Boost::ext].SML** v1.1.5 | 6.779 s | 0.572 s | 593.8 KiB
+| **AweSM** 0.3.13 | 3.449 s | 0.565 s | 101.5 KiB
+| **Boost.MSM**  | 22.039 s | 2.460 s | 321.2 KiB
+| **[Boost::ext].SML** v1.1.5 | 6.817 s | 0.576 s | 593.8 KiB
 
 ## The Test
 
