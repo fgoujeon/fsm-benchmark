@@ -7,9 +7,6 @@
 #include "common.hpp"
 #include <awesm.hpp>
 
-struct sm_def;
-using sm_t = awesm::sm<sm_def>;
-
 struct context
 {
     int counter = 0;
@@ -29,20 +26,23 @@ struct internal_transition_event
 template<int Index>
 struct state
 {
-    using conf_t = awesm::state_conf
+    using conf_type = awesm::state_conf
     <
         awesm::state_options::on_entry_any,
         awesm::state_options::on_event_any_of<internal_transition_event>
     >;
 
-    void on_entry();
+    void on_entry()
+    {
+        sm.process_event(internal_transition_event{});
+    }
 
     void on_event(const internal_transition_event& evt)
     {
         ctx.counter += evt.data;
     }
 
-    sm_t& sm;
+    awesm::sm_ref<internal_transition_event> sm;
     context& ctx;
 };
 
@@ -68,14 +68,10 @@ using sm_transition_table = awesm::transition_table
 
 struct sm_def
 {
-    using conf_t = awesm::sm_conf<sm_transition_table, context>;
+    using conf_type = awesm::sm_conf<sm_transition_table, context>;
 };
 
-template<int Index>
-void state<Index>::on_entry()
-{
-    sm.process_event(internal_transition_event{});
-}
+using sm_t = awesm::sm<sm_def>;
 
 int test()
 {
