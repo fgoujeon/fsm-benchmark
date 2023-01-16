@@ -12,33 +12,33 @@ This repository aims to benchmark various C++ FSM (Finite State Machine) librari
 
 | | Build time | Execution time | Binary size
 |--|--:|--:|--:|
-| **AweSM** 0.3.14 | 3.888 s | 2.395 s | 45.0 KiB
-| **Boost.MSM**  | 20.594 s | 2.012 s | 54.5 KiB
-| **[Boost::ext].SML** v1.1.5 | 5.086 s | 2.145 s | 36.0 KiB
+| **AweSM** 0.3.15 | 4.066 s | 2.169 s | 36.0 KiB
+| **Boost.MSM**  | 19.267 s | 1.999 s | 54.5 KiB
+| **[Boost::ext].SML** v1.1.6 | 5.007 s | 2.058 s | 36.0 KiB
 
 ### GCC
 
 * Hardware: Intel i5 750, 9.7 GiB RAM
-* System: Arch Linux 6.0.9-arch1-1
+* System: Arch Linux 6.1.4-arch1-1
 * Compiler: GCC 12.2.0
 
 | | Build time | Execution time | Binary size
 |--|--:|--:|--:|
-| **AweSM** 0.3.14 | 3.539 s | 0.556 s | 99.6 KiB
-| **Boost.MSM**  | 21.772 s | 2.462 s | 321.2 KiB
-| **[Boost::ext].SML** v1.1.5 | 6.907 s | 0.577 s | 593.8 KiB
+| **AweSM** 0.3.15 | 3.689 s | 0.466 s | 66.5 KiB
+| **Boost.MSM**  | 22.087 s | 2.475 s | 321.2 KiB
+| **[Boost::ext].SML** v1.1.6 | 7.067 s | 0.528 s | 600.0 KiB
 
 ### Clang
 
 * Hardware: Intel i5 750, 9.7 GiB RAM
-* System: Arch Linux 6.0.9-arch1-1
+* System: Arch Linux 6.1.4-arch1-1
 * Compiler: Clang 14.0.6
 
 | | Build time | Execution time | Binary size
 |--|--:|--:|--:|
-| **AweSM** 0.3.14 | 4.369 s | 0.780 s | 165.3 KiB
-| **Boost.MSM**  | 16.413 s | 2.999 s | 307.8 KiB
-| **[Boost::ext].SML** v1.1.5 | 7.508 s | 0.478 s | 643.3 KiB
+| **AweSM** 0.3.15 | 4.593 s | 0.638 s | 155.7 KiB
+| **Boost.MSM**  | 17.107 s | 3.005 s | 307.8 KiB
+| **[Boost::ext].SML** v1.1.6 | 8.463 s | 0.680 s | 774.3 KiB
 
 ## The Test
 
