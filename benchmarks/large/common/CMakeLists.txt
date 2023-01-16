@@ -22,6 +22,12 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         INTERFACE
             -Wall -pedantic
     )
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    target_compile_options(
+        ${TARGET}
+        INTERFACE
+            -Wall -pedantic
+    )
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_compile_options(
         ${TARGET}

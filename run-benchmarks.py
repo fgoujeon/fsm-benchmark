@@ -80,10 +80,6 @@ cmake_command = [
     "-S", src_dir,
     "-B", build_dir,
     "-D", "CMAKE_BUILD_TYPE=Release",
-    "-D", "SML_BUILD_BENCHMARKS=0",
-    "-D", "SML_BUILD_EXAMPLES=0",
-    "-D", "SML_BUILD_TESTS=0",
-    "-D", "SML_USE_EXCEPTIONS=0",
     "-D", "Boost_INCLUDE_DIR=" + boost_include_dir
     ]
 subprocess.run(cmake_command)

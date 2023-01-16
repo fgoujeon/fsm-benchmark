@@ -17,9 +17,14 @@ set_target_properties(
     CXX_STANDARD 17
 )
 
+target_include_directories(
+    ${TARGET}
+    PRIVATE
+        ${FSMB_AWESM_INCLUDE_DIR}
+)
+
 target_link_libraries(
     ${TARGET}
     PRIVATE
         large-common
-        awesm
 )
