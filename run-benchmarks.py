@@ -53,6 +53,7 @@ def test(lib_name):
     subprocess.run([
         "cmake",
         "--build", build_dir,
+        "--clean-first",
         "--config", "Release",
         "--target", "large-" + lib_name])
     end_time = time.time()
@@ -179,9 +180,6 @@ subprocess.run(cmake_command)
 
 #Run tests
 for iteration_index in range(iteration_count):
-    #Clean
-    subprocess.run(["cmake", "--build", build_dir, "--target", "clean"])
-
     for library in libraries:
         print("===== " + library.pretty_name + ", iteration " + str(iteration_index + 1) + "/" + str(iteration_count) + " =====")
         result = test(library.name)
