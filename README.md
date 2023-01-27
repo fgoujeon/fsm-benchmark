@@ -10,35 +10,38 @@ This repository aims to benchmark various C++ FSM (Finite State Machine) librari
 * System: Windows 11
 * Compiler: Visual Studio 2017
 
-| | Build time | Execution time | Binary size
-|--|--:|--:|--:|
-| **AweSM** 0.3.15 | 4.066 s | 2.169 s | 36.0 KiB
-| **Boost.MSM**  | 19.267 s | 1.999 s | 54.5 KiB
-| **[Boost::ext].SML** v1.1.6 | 5.007 s | 2.058 s | 36.0 KiB
+Best results of 5 iterations:
+|                             | Build time | Execution time | Binary size |
+|-----------------------------|-----------:|---------------:|------------:|
+| **AweSM** 0.3.16            | 5.435 s    | 2.307 s        | 33.5 KiB    |
+| **Boost.MSM**               | 22.820 s   | 2.131 s        | 54.5 KiB    |
+| **[Boost::ext].SML** v1.1.6 | 6.794 s    | 2.289 s        | 36.0 KiB    |
 
 ### GCC
 
 * Hardware: Intel i5 750, 9.7 GiB RAM
-* System: Arch Linux 6.1.4-arch1-1
-* Compiler: GCC 12.2.0
+* System: Arch Linux 6.1.7-arch1-1
+* Compiler: GCC 12.2.1
 
-| | Build time | Execution time | Binary size
-|--|--:|--:|--:|
-| **AweSM** 0.3.15 | 3.689 s | 0.466 s | 66.5 KiB
-| **Boost.MSM**  | 22.087 s | 2.475 s | 321.2 KiB
-| **[Boost::ext].SML** v1.1.6 | 7.067 s | 0.528 s | 600.0 KiB
+Best results of 3 iterations:
+|                             | Build time | Execution time | Binary size |
+|-----------------------------|-----------:|---------------:|------------:|
+| **AweSM** 0.3.16            | 3.475 s    | 0.502 s        | 55.9 KiB    |
+| **Boost.MSM**               | 21.811 s   | 2.346 s        | 316.1 KiB   |
+| **[Boost::ext].SML** v1.1.6 | 6.997 s    | 0.469 s        | 595.0 KiB   |
 
 ### Clang
 
 * Hardware: Intel i5 750, 9.7 GiB RAM
-* System: Arch Linux 6.1.4-arch1-1
-* Compiler: Clang 14.0.6
+* System: Arch Linux 6.1.7-arch1-1
+* Compiler: Clang 15.0.7
 
-| | Build time | Execution time | Binary size
-|--|--:|--:|--:|
-| **AweSM** 0.3.15 | 4.593 s | 0.638 s | 155.7 KiB
-| **Boost.MSM**  | 17.107 s | 3.005 s | 307.8 KiB
-| **[Boost::ext].SML** v1.1.6 | 8.463 s | 0.680 s | 774.3 KiB
+Best results of 3 iterations:
+|                             | Build time | Execution time | Binary size |
+|-----------------------------|-----------:|---------------:|------------:|
+| **AweSM** 0.3.16            | 4.361 s    | 0.704 s        | 97.1 KiB    |
+| **Boost.MSM**               | 16.140 s   | 2.985 s        | 302.7 KiB   |
+| **[Boost::ext].SML** v1.1.6 | 8.083 s    | 0.520 s        | 732.4 KiB   |
 
 ## The Test
 
