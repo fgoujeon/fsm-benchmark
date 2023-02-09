@@ -13,9 +13,9 @@ This repository aims to benchmark various C++ FSM (Finite State Machine) librari
 Best results of 5 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.17            | 4.465 s    | 2.200 s        | 33.5 KiB    |
-| **Boost.MSM**               | 20.620 s   | 2.116 s        | 54.5 KiB    |
-| **[Boost::ext].SML** v1.1.6 | 5.955 s    | 2.235 s        | 36.0 KiB    |
+| **AweSM** 0.3.18            | 4.663 s    | 2.337 s        | 33.5 KiB    |
+| **Boost.MSM**               | 21.070 s   | 2.105 s        | 54.5 KiB    |
+| **[Boost::ext].SML** v1.1.6 | 6.188 s    | 2.137 s        | 36.0 KiB    |
 
 ### GCC
 
@@ -26,9 +26,9 @@ Best results of 5 iterations:
 Best results of 3 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.17            | 3.354 s    | 0.454 s        | 55.8 KiB    |
-| **Boost.MSM**               | 21.609 s   | 2.436 s        | 316.1 KiB   |
-| **[Boost::ext].SML** v1.1.6 | 6.942 s    | 0.494 s        | 595.0 KiB   |
+| **AweSM** 0.3.18            | 3.221 s    | 0.452 s        | 55.9 KiB    |
+| **Boost.MSM**               | 21.684 s   | 2.353 s        | 316.1 KiB   |
+| **[Boost::ext].SML** v1.1.6 | 6.983 s    | 0.492 s        | 595.0 KiB   |
 
 ### Clang
 
@@ -39,9 +39,9 @@ Best results of 3 iterations:
 Best results of 3 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.17            | 3.972 s    | 0.611 s        | 81.2 KiB    |
-| **Boost.MSM**               | 16.300 s   | 2.936 s        | 302.7 KiB   |
-| **[Boost::ext].SML** v1.1.6 | 8.141 s    | 0.515 s        | 732.4 KiB   |
+| **AweSM** 0.3.18            | 3.759 s    | 0.613 s        | 81.3 KiB    |
+| **Boost.MSM**               | 16.159 s   | 2.904 s        | 302.7 KiB   |
+| **[Boost::ext].SML** v1.1.6 | 8.066 s    | 0.539 s        | 732.4 KiB   |
 
 ## The Test
 
