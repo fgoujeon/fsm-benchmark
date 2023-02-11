@@ -15,12 +15,12 @@ struct context
 template<int Index>
 struct state_transition_event
 {
-    int data = 1;
+    int two = 2;
 };
 
 struct internal_transition_event
 {
-    int data = 1;
+    int two = 2;
 };
 
 template<int Index>
@@ -28,18 +28,18 @@ struct state
 {
     using conf = awesm::state_conf
     <
-        awesm::state_options::on_entry_any,
-        awesm::state_options::on_event_any_of<internal_transition_event>
+        awesm::state_options::on_event_any_of<internal_transition_event>,
+        awesm::state_options::on_exit_any
     >;
-
-    void on_entry()
-    {
-        sm.process_event(internal_transition_event{});
-    }
 
     void on_event(const internal_transition_event& evt)
     {
-        ctx.counter += evt.data;
+        ctx.counter /= evt.two;
+    }
+
+    void on_exit()
+    {
+        sm.process_event(internal_transition_event{});
     }
 
     awesm::sm_ref<internal_transition_event> sm;
@@ -49,13 +49,13 @@ struct state
 template<int Index>
 void state_transition_action(context& ctx, const state_transition_event<Index>& evt)
 {
-    ctx.counter += evt.data;
+    ctx.counter = (ctx.counter + 1) * evt.two;
 }
 
 template<int Index>
 bool guard(context& /*ctx*/, const state_transition_event<Index>& evt)
 {
-    return evt.data >= 0;
+    return evt.two >= 0;
 }
 
 auto sm_transition_table()

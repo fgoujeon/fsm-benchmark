@@ -21,12 +21,12 @@ struct state_tpl
 template<int Index>
 struct state_transition_event
 {
-    int data = 1;
+    int two = 2;
 };
 
 struct internal_transition_event
 {
-    int data = 1;
+    int two = 2;
 };
 
 //Note: Using a constexpr lambda makes the build slightly slower (at least on GCC)
@@ -35,7 +35,7 @@ struct state_transition_action
 {
     void operator()(const state_transition_event<Index>& evt, context& ctx)
     {
-        ctx.counter += evt.data;
+        ctx.counter = (ctx.counter + 1) * evt.two;
     }
 };
 
@@ -45,13 +45,13 @@ struct internal_transition_action
 {
     void operator()(const internal_transition_event& evt, context& ctx)
     {
-        ctx.counter += evt.data;
+        ctx.counter /= evt.two;
     }
 };
 
 //Note: Using a constexpr lambda makes the build slightly slower (at least on GCC)
 template<int Index>
-struct entry_action
+struct exit_action
 {
     void operator()
     (
@@ -68,7 +68,7 @@ struct guard
 {
     bool operator()(const state_transition_event<Index>& evt)
     {
-        return evt.data >= 0;
+        return evt.two >= 0;
     }
 };
 
@@ -87,7 +87,7 @@ struct large
 #undef X
 
 #define X(N) \
-    , state<state_tpl<N>> + on_entry<_> / entry_action<N>{}
+    , state<state_tpl<N>> + on_exit<_> / exit_action<N>{}
             COUNTER
 #undef X
         );

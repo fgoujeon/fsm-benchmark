@@ -77,16 +77,12 @@ int main()
         counter += test();
     }
 
-    const auto expected_counter =
-        PROBLEM_SIZE *
-        test_loop_size *
-        main_loop_size *
-        2 + //internal transition + state transition
-        test_loop_size //entry action of first state
-    ;
+    constexpr auto expected_counter = test_loop_size * main_loop_size * PROBLEM_SIZE;
 
     if(counter != expected_counter)
+    {
         return 1;
+    }
 
     return 0;
 }

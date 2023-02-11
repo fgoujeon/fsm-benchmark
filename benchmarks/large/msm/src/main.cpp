@@ -20,19 +20,19 @@ using namespace msm::front;
 template<int Index>
 struct state_transition_event
 {
-    int data = 1;
+    int two = 2;
 };
 
 struct internal_transition_event
 {
-    int data = 1;
+    int two = 2;
 };
 
 template<int Index>
 struct state_tpl: msm::front::state<>
 {
     template<class Event, class Fsm>
-    void on_entry(const Event& event, Fsm& fsm)
+    void on_exit(const Event& event, Fsm& fsm)
     {
         fsm.process_event(internal_transition_event{});
     }
@@ -44,7 +44,7 @@ struct state_transition_action
     template<class Event, class Fsm, class SourceState, class TargetState>
     void operator()(const Event& evt, Fsm& sm, SourceState&, TargetState&)
     {
-        sm.counter += evt.data;
+        sm.counter = (sm.counter + 1) * evt.two;
     }
 };
 
@@ -54,7 +54,7 @@ struct internal_transition_action
     template<class Event, class Fsm, class SourceState, class TargetState>
     void operator()(const Event& evt, Fsm& sm, SourceState&, TargetState&)
     {
-        sm.counter += evt.data;
+        sm.counter /= evt.two;
     }
 };
 
@@ -64,7 +64,7 @@ struct guard
     template<class Event, class Fsm, class SourceState, class TargetState>
     bool operator()(const Event& evt, Fsm& sm, SourceState&, TargetState&)
     {
-        return evt.data >= 0;
+        return evt.two >= 0;
     }
 };
 
