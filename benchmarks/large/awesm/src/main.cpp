@@ -28,8 +28,8 @@ struct state
 {
     using conf = awesm::state_conf
     <
-        awesm::state_options::on_event_any_of<internal_transition_event>,
-        awesm::state_options::on_exit_any
+        awesm::state_opts::on_event_any_of<internal_transition_event>,
+        awesm::state_opts::on_exit_any
     >;
 
     void on_event(const internal_transition_event& evt)
@@ -37,12 +37,12 @@ struct state
         ctx.counter /= evt.two;
     }
 
-    void on_exit()
+    template<class Sm>
+    void on_exit(Sm& sm, awesm::whatever /*event*/)
     {
-        sm.process_event(internal_transition_event{});
+        sm.queue_event(internal_transition_event{});
     }
 
-    awesm::sm_ref<internal_transition_event> sm;
     context& ctx;
 };
 
@@ -61,12 +61,11 @@ bool guard(context& /*ctx*/, const state_transition_event<Index>& evt)
 auto sm_transition_table()
 {
     return awesm::transition_table
-    <
 #define X(N) \
-        COMMA_IF_NOT_0(N) awesm::row<state<N>, state_transition_event<N>, state<(N + 1) % PROBLEM_SIZE>, state_transition_action<N>, guard<N>>
+        .add<state<N>, state_transition_event<N>, state<(N + 1) % PROBLEM_SIZE>, state_transition_action<N>, guard<N>>
         COUNTER
 #undef X
-    >;
+    ;
 }
 
 struct sm_def
@@ -75,7 +74,7 @@ struct sm_def
     <
         sm_transition_table,
         context,
-        awesm::sm_options::small_event_max_size<sizeof(int)>
+        awesm::sm_opts::small_event_max_size<sizeof(int)>
     >;
 };
 
@@ -85,8 +84,6 @@ int test()
 {
     auto ctx = context{};
     auto sm = sm_t{ctx};
-
-    sm.start();
 
     for(auto i = 0; i < test_loop_size; ++i)
     {
