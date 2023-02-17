@@ -13,9 +13,9 @@ This repository aims to benchmark various C++ FSM (Finite State Machine) librari
 Best results of 5 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.19            | 5.301 s    | 2.314 s        | 32.5 KiB    |
-| **Boost.MSM**               | 21.819 s   | 2.141 s        | 54.5 KiB    |
-| **[Boost::ext].SML** v1.1.6 | 6.590 s    | 2.258 s        | 36.0 KiB    |
+| **AweSM** 0.3.20            | 4.536 s    | 2.289 s        | 32.0 KiB    |
+| **Boost.MSM**               | 21.217 s   | 2.158 s        | 54.5 KiB    |
+| **[Boost::ext].SML** v1.1.6 | 6.121 s    | 2.115 s        | 36.0 KiB    |
 
 ### GCC
 
@@ -26,9 +26,9 @@ Best results of 5 iterations:
 Best results of 3 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.19            | 3.158 s    | 0.495 s        | 54.9 KiB    |
-| **Boost.MSM**               | 21.715 s   | 2.354 s        | 315.8 KiB   |
-| **[Boost::ext].SML** v1.1.6 | 6.839 s    | 0.586 s        | 581.7 KiB   |
+| **AweSM** 0.3.20            | 2.946 s    | 0.493 s        | 54.9 KiB    |
+| **Boost.MSM**               | 21.692 s   | 2.388 s        | 315.8 KiB   |
+| **[Boost::ext].SML** v1.1.6 | 6.833 s    | 0.582 s        | 581.7 KiB   |
 
 ### Clang
 
@@ -39,9 +39,9 @@ Best results of 3 iterations:
 Best results of 3 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.19            | 3.749 s    | 0.557 s        | 80.5 KiB    |
-| **Boost.MSM**               | 16.010 s   | 2.819 s        | 302.7 KiB   |
-| **[Boost::ext].SML** v1.1.6 | 7.926 s    | 0.583 s        | 734.9 KiB   |
+| **AweSM** 0.3.20            | 3.099 s    | 0.529 s        | 72.6 KiB    |
+| **Boost.MSM**               | 15.971 s   | 2.778 s        | 302.7 KiB   |
+| **[Boost::ext].SML** v1.1.6 | 7.927 s    | 0.558 s        | 734.9 KiB   |
 
 ## The Test
 
@@ -49,12 +49,12 @@ The repository defines one program per library. Each program must implement, usi
 
 The test tries to mimic a real-life large FSM. It consists of:
 
-* a `int counter`;
+* an `int counter`;
 * a large FSM:
   * which defines:
     * 25 states (*state<sub>0</sub>* to *state<sub>24</sub>*);
-    * 25 event types for state transitions (*sevent<sub>0</sub>* to *sevent<sub>24</sub>*) that contain a `int two = 2`;
-    * 1 event type for internal transitions (*ievent*) that contains a `int two = 2`;
+    * 25 event types for state transitions (*sevent<sub>0</sub>* to *sevent<sub>24</sub>*) that contain an `int two = 2`;
+    * 1 event type for internal transitions (*ievent*) that contains an `int two = 2`;
     * 25 state transition actions (*saction<sub>0</sub>* to *saction<sub>24</sub>*) doing `counter = (counter + 1) * event.two`;
     * 25 internal transition actions (*iaction<sub>0</sub>* to *iaction<sub>24</sub>*) doing `counter /= event.two`;
     * 25 state exit actions (*eaction<sub>0</sub>* to *eaction<sub>24</sub>*) making the FSM process *ievent* (in order to test run-to-completion);
