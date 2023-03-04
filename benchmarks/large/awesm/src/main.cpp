@@ -28,7 +28,7 @@ struct state
 {
     using conf = awesm::state_conf
     <
-        awesm::state_opts::on_event_any_of<internal_transition_event>,
+        awesm::state_opts::on_event<internal_transition_event>,
         awesm::state_opts::on_exit_any
     >;
 
@@ -82,8 +82,7 @@ using sm_t = awesm::sm<sm_def>;
 
 int test()
 {
-    auto ctx = context{};
-    auto sm = sm_t{ctx};
+    auto sm = sm_t{};
 
     for(auto i = 0; i < test_loop_size; ++i)
     {
@@ -93,5 +92,5 @@ int test()
 #undef X
     }
 
-    return ctx.counter;
+    return sm.get_context().counter;
 }
