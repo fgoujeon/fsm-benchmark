@@ -19,9 +19,9 @@ Tested libraries are:
 Best results of 5 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.23            | 5.099 s    | 2.264 s        | 32.0 KiB    |
-| **Boost.MSM**               | 21.054 s   | 2.129 s        | 54.5 KiB    |
-| **[Boost::ext].SML** v1.1.6 | 6.217 s    | 2.224 s        | 36.0 KiB    |
+| **AweSM** 0.3.24            | 5.138 s    | 2.241 s        | 26.0 KiB    |
+| **Boost.MSM**               | 22.917 s   | 2.365 s        | 54.5 KiB    |
+| **[Boost::ext].SML** v1.1.6 | 6.795 s    | 2.435 s        | 36.0 KiB    |
 
 ### GCC
 
@@ -32,9 +32,9 @@ Best results of 5 iterations:
 Best results of 3 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.23            | 3.068 s    | 0.457 s        | 54.9 KiB    |
-| **Boost.MSM**               | 22.059 s   | 2.403 s        | 315.8 KiB   |
-| **[Boost::ext].SML** v1.1.6 | 6.979 s    | 0.571 s        | 581.7 KiB   |
+| **AweSM** 0.3.24            | 2.773 s    | 0.417 s        | 49.1 KiB    |
+| **Boost.MSM**               | 21.732 s   | 2.359 s        | 315.8 KiB   |
+| **[Boost::ext].SML** v1.1.6 | 6.861 s    | 0.584 s        | 581.7 KiB   |
 
 ### Clang
 
@@ -45,9 +45,9 @@ Best results of 3 iterations:
 Best results of 3 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.23            | 3.197 s    | 0.448 s        | 72.7 KiB    |
-| **Boost.MSM**               | 16.055 s   | 2.853 s        | 302.7 KiB   |
-| **[Boost::ext].SML** v1.1.6 | 7.925 s    | 0.572 s        | 734.9 KiB   |
+| **AweSM** 0.3.24            | 2.946 s    | 0.548 s        | 58.6 KiB    |
+| **Boost.MSM**               | 16.027 s   | 2.789 s        | 302.7 KiB   |
+| **[Boost::ext].SML** v1.1.6 | 7.953 s    | 0.583 s        | 734.9 KiB   |
 
 ## The Test
 
