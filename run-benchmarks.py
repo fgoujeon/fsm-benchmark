@@ -150,14 +150,14 @@ def print_test_results(libraries):
         formatted_library_infos
     )
 
-if len(sys.argv) != 4:
-    print("Usage: run-benchmarks.py BUILD_DIR BOOST_INCLUDE_DIR ITERATION_COUNT")
+if len(sys.argv) < 3:
+    print("Usage: run-benchmarks.py BUILD_DIR ITERATION_COUNT [CMAKE_EXTRA_OPTIONS...]")
     exit()
 
 src_dir = os.path.dirname(__file__)
 build_dir = sys.argv[1]
-boost_include_dir = sys.argv[2]
-iteration_count = max(int(sys.argv[3]), 1)
+iteration_count = max(int(sys.argv[2]), 1)
+cmake_extra_options = sys.argv[3:]
 
 #List the libraries we want to test
 libraries = [
@@ -170,12 +170,7 @@ for library in libraries:
     library.version = get_library_version(library.name)
 
 #Initialize CMake
-cmake_command = [
-    "cmake",
-    "-S", src_dir,
-    "-B", build_dir,
-    "-D", "CMAKE_BUILD_TYPE=Release",
-    "-D", "Boost_INCLUDE_DIR=" + boost_include_dir]
+cmake_command = ["cmake", "-S", src_dir, "-B", build_dir] + cmake_extra_options
 subprocess.run(cmake_command)
 
 #Run tests

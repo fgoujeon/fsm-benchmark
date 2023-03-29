@@ -16,18 +16,26 @@ Tested libraries are:
 * System: Windows 11
 * Compiler: Visual Studio 2017
 
+```batch
+python run-benchmarks.py %BUILD_DIR% 5 -G "Visual Studio 15 2017 Win64" -D Boost_INCLUDE_DIR=%BOOST_INCLUDE_DIR%
+```
+
 Best results of 5 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.24            | 5.138 s    | 2.241 s        | 26.0 KiB    |
-| **Boost.MSM**               | 22.917 s   | 2.365 s        | 54.5 KiB    |
-| **[Boost::ext].SML** v1.1.6 | 6.795 s    | 2.435 s        | 36.0 KiB    |
+| **AweSM** 0.3.24            | 4.431 s    | 1.198 s        | 29.0 KiB    |
+| **Boost.MSM**               | 21.188 s   | 4.466 s        | 69.5 KiB    |
+| **[Boost::ext].SML** v1.1.6 | 6.088 s    | 1.244 s        | 52.5 KiB    |
 
 ### GCC
 
 * Hardware: Intel i5 750, 9.7 GiB RAM
 * System: Arch Linux 6.1.7-arch1-1
 * Compiler: GCC 12.2.1
+
+```bash
+CXX=g++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release
+```
 
 Best results of 3 iterations:
 |                             | Build time | Execution time | Binary size |
@@ -41,6 +49,10 @@ Best results of 3 iterations:
 * Hardware: Intel i5 750, 9.7 GiB RAM
 * System: Arch Linux 6.1.7-arch1-1
 * Compiler: Clang 15.0.7
+
+```bash
+CXX=clang++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release
+```
 
 Best results of 3 iterations:
 |                             | Build time | Execution time | Binary size |
