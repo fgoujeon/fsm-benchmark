@@ -23,9 +23,9 @@ python run-benchmarks.py %BUILD_DIR% 5 -G "Visual Studio 15 2017 Win64" -D Boost
 Best results of 5 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.24            | 4.431 s    | 1.198 s        | 29.0 KiB    |
-| **Boost.MSM**               | 21.188 s   | 4.466 s        | 69.5 KiB    |
-| **[Boost::ext].SML** v1.1.6 | 6.088 s    | 1.244 s        | 52.5 KiB    |
+| **AweSM** 0.3.25            | 5.629 s    | 1.251 s        | 31.5 KiB    |
+| **Boost.MSM**               | 25.613 s   | 4.982 s        | 69.5 KiB    |
+| **[Boost::ext].SML** v1.1.6 | 7.773 s    | 1.385 s        | 52.5 KiB    |
 
 ### GCC
 
@@ -40,9 +40,9 @@ CXX=g++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release
 Best results of 3 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.24            | 2.773 s    | 0.417 s        | 49.1 KiB    |
-| **Boost.MSM**               | 21.732 s   | 2.359 s        | 315.8 KiB   |
-| **[Boost::ext].SML** v1.1.6 | 6.861 s    | 0.584 s        | 581.7 KiB   |
+| **AweSM** 0.3.25            | 2.619 s    | 0.464 s        | 49.3 KiB    |
+| **Boost.MSM**               | 21.843 s   | 2.391 s        | 315.8 KiB   |
+| **[Boost::ext].SML** v1.1.6 | 6.912 s    | 0.573 s        | 581.7 KiB   |
 
 ### Clang
 
@@ -57,9 +57,9 @@ CXX=clang++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release
 Best results of 3 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.24            | 2.946 s    | 0.548 s        | 58.6 KiB    |
-| **Boost.MSM**               | 16.027 s   | 2.789 s        | 302.7 KiB   |
-| **[Boost::ext].SML** v1.1.6 | 7.953 s    | 0.583 s        | 734.9 KiB   |
+| **AweSM** 0.3.25            | 3.206 s    | 0.556 s        | 74.3 KiB    |
+| **Boost.MSM**               | 16.075 s   | 2.809 s        | 302.7 KiB   |
+| **[Boost::ext].SML** v1.1.6 | 7.982 s    | 0.587 s        | 734.9 KiB   |
 
 ## The Test
 

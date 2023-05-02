@@ -28,7 +28,7 @@ struct state
 {
     using conf = awesm::state_conf
         ::on_event<internal_transition_event>
-        ::on_exit<true>
+        ::on_exit
     ;
 
     void on_event(const internal_transition_event& evt)
@@ -36,8 +36,8 @@ struct state
         ctx.counter /= evt.two;
     }
 
-    template<class Sm>
-    void on_exit(Sm& sm, awesm::whatever /*event*/)
+    template<class Sm, class Event>
+    void on_exit(Sm& sm, const Event& /*event*/)
     {
         sm.queue_event(internal_transition_event{});
     }
@@ -61,7 +61,7 @@ auto sm_transition_table()
 {
     return awesm::transition_table
 #define X(N) \
-        ::add<state<N>, state_transition_event<N>, state<(N + 1) % PROBLEM_SIZE>, state_transition_action<N>, guard<N>>
+    ::add<state<N>, state_transition_event<N>, state<(N + 1) % PROBLEM_SIZE>, state_transition_action<N>, guard<N>>
         COUNTER
 #undef X
     {};
@@ -90,5 +90,5 @@ int test()
 #undef X
     }
 
-    return sm.get_context().counter;
+    return sm.context().counter;
 }
