@@ -6,7 +6,11 @@ Tested libraries are:
 * [Boost](https://www.boost.org/).MSM;
 * [\[Boost::ext\].SML](https://boost-ext.github.io/sml/).
 
-**Disclaimer: I'm the author of AweSM.** Obviously, I've tried my best to make the test as fair as possible for every library. However, since I'm only an expert in my own library, I might have done mistakes. Please feel free to check the implementations and contact me if something has to be fixed.
+**Disclaimer**:
+
+* I'm the author of AweSM.
+* I've tried my best to make the test as fair as possible for every library. However, since I'm only an expert in my own library, I might have done mistakes. Please feel free to check the implementations and contact me if something has to be fixed.
+* Keep in mind that this is only a single test. Different benchmarks may (or may not) give different results.
 
 ## Results
 
