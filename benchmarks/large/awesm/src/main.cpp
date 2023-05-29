@@ -28,7 +28,7 @@ struct state
 {
     using conf = awesm::state_conf
         ::on_event<internal_transition_event>
-        ::on_exit
+        ::on_exit_any
     ;
 
     void on_event(const internal_transition_event& evt)
