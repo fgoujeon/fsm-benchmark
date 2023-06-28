@@ -16,54 +16,54 @@ Tested libraries are:
 
 ### Visual Studio
 
-* Hardware: Intel i7 8850H, 32.0 GiB RAM
-* System: Windows 11
+* Hardware: AMD Ryzen 5 1600, 8.0 GiB RAM
+* System: Windows 10
 * Compiler: Visual Studio 2022
 
 ```batch
-python run-benchmarks.py %BUILD_DIR% 5 -G "Visual Studio 17 2022" -A "x64" -D Boost_INCLUDE_DIR=%BOOST_INCLUDE_DIR%
+py run-benchmarks.py %BUILD_DIR% 5 -G "Visual Studio 17 2022" -A "x64" -D Boost_INCLUDE_DIR=%BOOST_INCLUDE_DIR% -D FSMB_FORCED_CXX_STANDARD=20
 ```
 
 Best results of 5 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.26            | 7.095 s    | 1.014 s        | 28.0 KiB    |
-| **Boost.MSM**               | 23.343 s   | 4.532 s        | 69.0 KiB    |
-| **[Boost::ext].SML** v1.1.8 | 9.269 s    | 0.831 s        | 49.0 KiB    |
+| **AweSM** 0.3.26            | 3.746 s    | 0.784 s        | 28.0 KiB    |
+| **Boost.MSM**               | 20.497 s   | 4.385 s        | 68.5 KiB    |
+| **[Boost::ext].SML** v1.1.8 | 6.043 s    | 0.504 s        | 49.0 KiB    |
 
 ### GCC
 
 * Hardware: Intel i5 750, 9.7 GiB RAM
-* System: Arch Linux 6.3.4-arch1-1
+* System: Linux 6.3.9-arch1-1
 * Compiler: GCC 13.1.1
 
 ```bash
-CXX=g++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release
+CXX=g++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D FSMB_FORCED_CXX_STANDARD=20
 ```
 
 Best results of 3 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.26            | 2.701 s    | 0.449 s        | 49.3 KiB    |
-| **Boost.MSM**               | 21.068 s   | 2.384 s        | 319.8 KiB   |
-| **[Boost::ext].SML** v1.1.8 | 7.153 s    | 0.626 s        | 585.7 KiB   |
+| **AweSM** 0.3.26            | 2.891 s    | 0.459 s        | 49.3 KiB    |
+| **Boost.MSM**               | 21.000 s   | 2.401 s        | 319.8 KiB   |
+| **[Boost::ext].SML** v1.1.8 | 7.349 s    | 0.653 s        | 585.7 KiB   |
 
 ### Clang
 
 * Hardware: Intel i5 750, 9.7 GiB RAM
-* System: Arch Linux 6.3.4-arch1-1
+* System: Linux 6.3.9-arch1-1
 * Compiler: Clang 15.0.7
 
 ```bash
-CXX=clang++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release
+CXX=clang++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D FSMB_FORCED_CXX_STANDARD=20
 ```
 
 Best results of 3 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.26            | 3.372 s    | 0.570 s        | 78.3 KiB    |
-| **Boost.MSM**               | 16.215 s   | 2.797 s        | 302.7 KiB   |
-| **[Boost::ext].SML** v1.1.6 | 8.088 s    | 0.585 s        | 734.9 KiB   |
+| **AweSM** 0.3.26            | 3.676 s    | 0.573 s        | 78.3 KiB    |
+| **Boost.MSM**               | 17.532 s   | 2.832 s        | 302.7 KiB   |
+| **[Boost::ext].SML** v1.1.6 | 8.266 s    | 0.574 s        | 734.9 KiB   |
 
 ## The Test
 
