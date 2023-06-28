@@ -12,6 +12,17 @@ file(GLOB_RECURSE SOURCE_FILES *)
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR} FILES ${SOURCE_FILES})
 add_executable(${TARGET} ${SOURCE_FILES})
 
+if(FSMB_FORCED_CXX_STANDARD)
+    set(TARGET_CXX_STANDARD ${FSMB_FORCED_CXX_STANDARD})
+else()
+    set(TARGET_CXX_STANDARD 98)
+endif()
+
+set_target_properties(
+    ${TARGET} PROPERTIES
+    CXX_STANDARD ${TARGET_CXX_STANDARD}
+)
+
 target_link_libraries(
     ${TARGET}
     PRIVATE

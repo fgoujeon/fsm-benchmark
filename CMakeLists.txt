@@ -10,6 +10,8 @@ project(fsm-benchmark)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+set(FSMB_FORCED_CXX_STANDARD "" CACHE STRING "If set, overwrites CXX_STANDARD property of all targets")
+
 set(FSMB_AWESM_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/libraries/awesm/awesm/include)
 set(FSMB_SML_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/libraries/sml/include)
 
