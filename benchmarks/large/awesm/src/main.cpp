@@ -39,7 +39,7 @@ struct state
     template<class Sm, class Event>
     void on_exit(Sm& sm, const Event& /*event*/)
     {
-        sm.queue_event(internal_transition_event{});
+        sm.enqueue_event(internal_transition_event{});
     }
 
     context& ctx;
@@ -85,7 +85,7 @@ int test()
     for(auto i = 0; i < test_loop_size; ++i)
     {
 #define X(N) \
-    sm.process_event(state_transition_event<N>{});
+    sm.process_event_now(state_transition_event<N>{});
         COUNTER
 #undef X
     }

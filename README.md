@@ -21,15 +21,16 @@ Tested libraries are:
 * Compiler: Visual Studio 2022
 
 ```batch
-py run-benchmarks.py %BUILD_DIR% 5 -G "Visual Studio 17 2022" -A "x64" -D Boost_INCLUDE_DIR=%BOOST_INCLUDE_DIR% -D FSMB_FORCED_CXX_STANDARD=20
+py run-benchmarks.py %BUILD_DIR% 3 -G "Visual Studio 17 2022" -A "x64" -D Boost_INCLUDE_DIR=%BOOST_INCLUDE_DIR% -D FSMB_FORCED_CXX_STANDARD=20
 ```
 
-Best results of 5 iterations:
+Best results of 3 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.26            | 3.746 s    | 0.784 s        | 28.0 KiB    |
-| **Boost.MSM**               | 20.497 s   | 4.385 s        | 68.5 KiB    |
-| **[Boost::ext].SML** v1.1.8 | 6.043 s    | 0.504 s        | 49.0 KiB    |
+| **AweSM** 0.3.27            | 3.681 s    | 0.671 s        | 20.0 KiB    |
+| **Boost.MSM**               | 20.162 s   | 4.379 s        | 68.5 KiB    |
+| **[Boost::ext].SML** v1.1.8 | 5.697 s    | 0.508 s        | 49.0 KiB    |
+
 
 ### GCC
 
@@ -44,9 +45,9 @@ CXX=g++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D F
 Best results of 3 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.26            | 2.891 s    | 0.459 s        | 49.3 KiB    |
-| **Boost.MSM**               | 21.000 s   | 2.401 s        | 319.8 KiB   |
-| **[Boost::ext].SML** v1.1.8 | 7.349 s    | 0.653 s        | 585.7 KiB   |
+| **AweSM** 0.3.27            | 2.652 s    | 0.441 s        | 29.4 KiB    |
+| **Boost.MSM**               | 20.954 s   | 2.380 s        | 319.8 KiB   |
+| **[Boost::ext].SML** v1.1.8 | 7.390 s    | 0.667 s        | 585.7 KiB   |
 
 ### Clang
 
@@ -61,9 +62,9 @@ CXX=clang++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release 
 Best results of 3 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.26            | 3.676 s    | 0.573 s        | 78.3 KiB    |
-| **Boost.MSM**               | 17.532 s   | 2.832 s        | 302.7 KiB   |
-| **[Boost::ext].SML** v1.1.6 | 8.266 s    | 0.574 s        | 734.9 KiB   |
+| **AweSM** 0.3.27            | 3.098 s    | 0.574 s        | 38.8 KiB    |
+| **Boost.MSM**               | 17.595 s   | 2.817 s        | 302.7 KiB   |
+| **[Boost::ext].SML** v1.1.8 | 8.293 s    | 0.588 s        | 734.9 KiB   |
 
 ## The Test
 
