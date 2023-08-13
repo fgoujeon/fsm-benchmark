@@ -6,7 +6,7 @@
 
 cmake_minimum_required(VERSION 3.10)
 
-set(TARGET large-awesm)
+set(TARGET large-maki)
 
 file(GLOB_RECURSE SOURCE_FILES *)
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR} FILES ${SOURCE_FILES})
@@ -26,7 +26,7 @@ set_target_properties(
 target_include_directories(
     ${TARGET}
     PRIVATE
-        ${FSMB_AWESM_INCLUDE_DIR}
+        ${FSMB_MAKI_INCLUDE_DIR}
 )
 
 target_link_libraries(
