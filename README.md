@@ -2,13 +2,13 @@ This repository aims to benchmark various C++ FSM (Finite State Machine) librari
 
 Tested libraries are:
 
-* [AweSM](https://github.com/fgoujeon/awesm);
+* [Maki](https://github.com/fgoujeon/maki);
 * [Boost](https://www.boost.org/).MSM;
 * [\[Boost::ext\].SML](https://boost-ext.github.io/sml/).
 
 **Disclaimer**:
 
-* I'm the author of AweSM.
+* I'm the author of Maki.
 * I've tried my best to make the test as fair as possible for every library. However, since I'm only an expert in my own library, I might have done mistakes. Please feel free to check the implementations and contact me if something has to be fixed.
 * Keep in mind that this is only a single test. Different benchmarks may (or may not) give different results.
 
@@ -27,16 +27,15 @@ py run-benchmarks.py %BUILD_DIR% 3 -G "Visual Studio 17 2022" -A "x64" -D Boost_
 Best results of 3 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.27            | 3.681 s    | 0.671 s        | 20.0 KiB    |
-| **Boost.MSM**               | 20.162 s   | 4.379 s        | 68.5 KiB    |
-| **[Boost::ext].SML** v1.1.8 | 5.697 s    | 0.508 s        | 49.0 KiB    |
-
+| **Maki** 0.3.28             | 3.665 s    | 0.354 s        | 18.5 KiB    |
+| **Boost.MSM**               | 20.015 s   | 4.369 s        | 68.5 KiB    |
+| **[Boost::ext].SML** v1.1.8 | 5.664 s    | 0.500 s        | 49.0 KiB    |
 
 ### GCC
 
 * Hardware: Intel i5 750, 9.7 GiB RAM
-* System: Linux 6.3.9-arch1-1
-* Compiler: GCC 13.1.1
+* System: Linux 6.4.10-arch1-1
+* Compiler: GCC 13.2.1
 
 ```bash
 CXX=g++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D FSMB_FORCED_CXX_STANDARD=20
@@ -45,14 +44,14 @@ CXX=g++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D F
 Best results of 3 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.27            | 2.652 s    | 0.441 s        | 29.4 KiB    |
-| **Boost.MSM**               | 20.954 s   | 2.380 s        | 319.8 KiB   |
-| **[Boost::ext].SML** v1.1.8 | 7.390 s    | 0.667 s        | 585.7 KiB   |
+| **Maki** 0.3.28             | 2.729 s    | 0.437 s        | 25.4 KiB    |
+| **Boost.MSM**               | 21.937 s   | 2.482 s        | 319.8 KiB   |
+| **[Boost::ext].SML** v1.1.8 | 7.470 s    | 0.649 s        | 585.7 KiB   |
 
 ### Clang
 
 * Hardware: Intel i5 750, 9.7 GiB RAM
-* System: Linux 6.3.9-arch1-1
+* System: Linux 6.4.10-arch1-1
 * Compiler: Clang 15.0.7
 
 ```bash
@@ -62,9 +61,9 @@ CXX=clang++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release 
 Best results of 3 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **AweSM** 0.3.27            | 3.098 s    | 0.574 s        | 38.8 KiB    |
-| **Boost.MSM**               | 17.595 s   | 2.817 s        | 302.7 KiB   |
-| **[Boost::ext].SML** v1.1.8 | 8.293 s    | 0.588 s        | 734.9 KiB   |
+| **Maki** 0.3.28             | 3.106 s    | 0.479 s        | 35.0 KiB    |
+| **Boost.MSM**               | 17.642 s   | 2.835 s        | 302.7 KiB   |
+| **[Boost::ext].SML** v1.1.8 | 8.282 s    | 0.579 s        | 734.9 KiB   |
 
 ## The Test
 

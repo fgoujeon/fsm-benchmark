@@ -1,6 +1,7 @@
 [submodule "libraries/sml"]
 	path = libraries/sml
 	url = https://github.com/boost-ext/sml.git
-[submodule "libraries/awesm"]
-	path = libraries/awesm
-	url = https://github.com/fgoujeon/awesm.git
+[submodule "libraries/maki"]
+	path = libraries/maki
+	url = https://github.com/fgoujeon/maki.git
+	branch = main

@@ -5,7 +5,7 @@
 //Official repository: https://github.com/fgoujeon/fsm-benchmark
 
 #include "common.hpp"
-#include <awesm.hpp>
+#include <maki.hpp>
 
 struct context
 {
@@ -26,12 +26,12 @@ struct internal_transition_event
 template<int Index>
 struct state
 {
-    using conf = awesm::state_conf
+    using conf = maki::state_conf
         ::on_event<internal_transition_event>
         ::on_exit_any
     ;
 
-    void on_event(const internal_transition_event& evt)
+    void on_event_ce(context& ctx, const internal_transition_event& evt)
     {
         ctx.counter /= evt.two;
     }
@@ -41,8 +41,6 @@ struct state
     {
         sm.enqueue_event(internal_transition_event{});
     }
-
-    context& ctx;
 };
 
 template<int Index>
@@ -59,7 +57,7 @@ bool guard(context& /*ctx*/, const state_transition_event<Index>& evt)
 
 auto sm_transition_table()
 {
-    return awesm::transition_table
+    return maki::transition_table
 #define X(N) \
     ::add<state<N>, state_transition_event<N>, state<(N + 1) % PROBLEM_SIZE>, state_transition_action<N>, guard<N>>
         COUNTER
@@ -69,14 +67,14 @@ auto sm_transition_table()
 
 struct sm_def
 {
-    using conf = awesm::sm_conf
+    using conf = maki::machine_conf
         ::transition_tables<decltype(sm_transition_table())>
         ::context<context>
         ::small_event_max_size<sizeof(int)>
     ;
 };
 
-using sm_t = awesm::sm<sm_def>;
+using sm_t = maki::machine<sm_def>;
 
 int test()
 {
