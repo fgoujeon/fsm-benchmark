@@ -51,8 +51,8 @@ Best results of 3 iterations:
 ### Clang
 
 * Hardware: Intel i5 750, 9.7 GiB RAM
-* System: Linux 6.4.10-arch1-1
-* Compiler: Clang 15.0.7
+* System: Linux 6.6.8-arch1-1
+* Compiler: Clang 16.0.6
 
 ```bash
 CXX=clang++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D FSMB_FORCED_CXX_STANDARD=20
@@ -61,9 +61,9 @@ CXX=clang++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release 
 Best results of 3 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 0.3.28             | 3.106 s    | 0.479 s        | 35.0 KiB    |
-| **Boost.MSM**               | 17.642 s   | 2.835 s        | 302.7 KiB   |
-| **[Boost::ext].SML** v1.1.8 | 8.282 s    | 0.579 s        | 734.9 KiB   |
+| **Maki** 0.3.28             | 3.322 s    | 0.522 s        | 34.9 KiB    |
+| **Boost.MSM**               | 19.087 s   | 2.906 s        | 302.7 KiB   |
+| **[Boost::ext].SML** v1.1.8 | 8.970 s    | 0.669 s        | 742.8 KiB   |
 
 ## The Test
 
