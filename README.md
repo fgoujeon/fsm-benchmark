@@ -27,9 +27,9 @@ py run-benchmarks.py %BUILD_DIR% 3 -G "Visual Studio 17 2022" -A "x64" -D Boost_
 Best results of 3 iterations:
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 0.3.28             | 3.665 s    | 0.354 s        | 18.5 KiB    |
-| **Boost.MSM**               | 20.015 s   | 4.369 s        | 68.5 KiB    |
-| **[Boost::ext].SML** v1.1.8 | 5.664 s    | 0.500 s        | 49.0 KiB    |
+| **Maki** 0.4.0              | 17.293 s   | 0.696 s        | 22.0 KiB    |
+| **Boost.MSM**               | 20.284 s   | 4.421 s        | 67.5 KiB    |
+| **[Boost::ext].SML** v1.1.8 | 5.686 s    | 0.500 s        | 48.5 KiB    |
 
 ### GCC
 
