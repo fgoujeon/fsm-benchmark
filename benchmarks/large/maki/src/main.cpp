@@ -24,24 +24,27 @@ struct internal_transition_event
 };
 
 template<int Index>
-struct state
-{
-    using conf = maki::state_conf
-        ::on_event<internal_transition_event>
-        ::on_exit_any
-    ;
+constexpr auto basic_state_conf = maki::state_conf{}
+    .internal_action_ce
+    (
+        maki::type<internal_transition_event>,
+        [](context& ctx, const internal_transition_event& evt)
+        {
+            ctx.counter /= evt.two;
+        }
+    )
+    .exit_action_m
+    (
+        maki::any,
+        [](auto& mach)
+        {
+            mach.enqueue_event(internal_transition_event{});
+        }
+    )
+;
 
-    void on_event_ce(context& ctx, const internal_transition_event& evt)
-    {
-        ctx.counter /= evt.two;
-    }
-
-    template<class Sm, class Event>
-    void on_exit(Sm& sm, const Event& /*event*/)
-    {
-        sm.enqueue_event(internal_transition_event{});
-    }
-};
+template<int Index>
+constexpr const auto& state_conf = basic_state_conf<Index>;
 
 template<int Index>
 void state_transition_action(context& ctx, const state_transition_event<Index>& evt)
@@ -55,26 +58,20 @@ bool guard(context& /*ctx*/, const state_transition_event<Index>& evt)
     return evt.two >= 0;
 }
 
-auto sm_transition_table()
-{
-    return maki::transition_table
+constexpr auto transition_table = maki::transition_table{}
 #define X(N) \
-    ::add<state<N>, state_transition_event<N>, state<(N + 1) % PROBLEM_SIZE>, state_transition_action<N>, guard<N>>
-        COUNTER
+    (state_conf<N>, maki::type<state_transition_event<N>>, state_conf<(N + 1) % PROBLEM_SIZE>, state_transition_action<N>, guard<N>)
+    COUNTER
 #undef X
-    {};
-}
+;
 
-struct sm_def
-{
-    using conf = maki::machine_conf
-        ::transition_tables<decltype(sm_transition_table())>
-        ::context<context>
-        ::small_event_max_size<sizeof(int)>
-    ;
-};
+constexpr auto machine_conf = maki::machine_conf{}
+    .transition_tables(transition_table)
+    .context(maki::type<context>)
+    .small_event_max_size(sizeof(int))
+;
 
-using sm_t = maki::machine<sm_def>;
+using sm_t = maki::make_machine<machine_conf>;
 
 int test()
 {
