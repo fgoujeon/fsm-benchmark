@@ -24,7 +24,7 @@ struct internal_transition_event
 };
 
 template<int Index>
-constexpr auto basic_state_conf = maki::state_conf{}
+constexpr auto state_conf = maki::state_conf{}
     .internal_action_ce
     (
         maki::type<internal_transition_event>,
@@ -35,16 +35,12 @@ constexpr auto basic_state_conf = maki::state_conf{}
     )
     .exit_action_m
     (
-        maki::any,
         [](auto& mach)
         {
             mach.enqueue_event(internal_transition_event{});
         }
     )
 ;
-
-template<int Index>
-constexpr const auto& state_conf = basic_state_conf<Index>;
 
 template<int Index>
 void state_transition_action(context& ctx, const state_transition_event<Index>& evt)
