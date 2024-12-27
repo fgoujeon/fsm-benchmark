@@ -65,6 +65,7 @@ constexpr auto machine_conf = maki::machine_conf{}
     .transition_tables(transition_table)
     .context_a(maki::type<context>)
     .small_event_max_size(sizeof(int))
+    .process_event_now_enabled(true)
 ;
 
 using sm_t = maki::make_machine<machine_conf>;
