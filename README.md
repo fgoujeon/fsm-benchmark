@@ -27,9 +27,9 @@ py run-benchmarks.py %BUILD_DIR% 3 -G "Visual Studio 17 2022" -A "x64" -D Boost_
 Best results of 3 iterations:
 |                              | Build time | Execution time | Binary size |
 |------------------------------|-----------:|---------------:|------------:|
-| **Maki** 0.4.5               | 9.082 s    | 0.370 s        | 20.5 KiB    |
-| **Boost.MSM**                | 25.715 s   | 4.338 s        | 61.0 KiB    |
-| **[Boost::ext].SML** v1.1.10 | 9.460 s    | 0.800 s        | 48.5 KiB    |
+| **Maki** 0.4.6               | 7.711 s    | 0.367 s        | 20.5 KiB    |
+| **Boost.MSM**                | 23.373 s   | 4.476 s        | 61.0 KiB    |
+| **[Boost::ext].SML** v1.1.10 | 6.691 s    | 0.823 s        | 48.5 KiB    |
 
 ### GCC
 
@@ -44,15 +44,15 @@ CXX=g++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D F
 Best results of 3 iterations:
 |                              | Build time | Execution time | Binary size |
 |------------------------------|-----------:|---------------:|------------:|
-| **Maki** 0.4.5               | 1.056 s    | 0.148 s        | 29.8 KiB    |
-| **Boost.MSM**                | 6.216 s    | 1.173 s        | 331.8 KiB   |
-| **[Boost::ext].SML** v1.1.10 | 2.224 s    | 0.212 s        | 586.7 KiB   |
+| **Maki** 0.4.6               | 1.131 s    | 0.147 s        | 29.6 KiB    |
+| **Boost.MSM**                | 6.205 s    | 1.163 s        | 331.8 KiB   |
+| **[Boost::ext].SML** v1.1.10 | 2.210 s    | 0.211 s        | 586.6 KiB   |
 
 ### Clang
 
 * Hardware: AMD Ryzen 7 7800X3D, 32 GiB RAM
 * System: Linux 6.12.6-arch1-1
-* Compiler: Clang 18.1.8
+* Compiler: Clang 19.1.7
 
 ```bash
 CXX=clang++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D FSMB_FORCED_CXX_STANDARD=20
@@ -61,9 +61,9 @@ CXX=clang++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release 
 Best results of 3 iterations:
 |                              | Build time | Execution time | Binary size |
 |------------------------------|-----------:|---------------:|------------:|
-| **Maki** 0.4.5               | 2.285 s    | 0.158 s        | 25.7 KiB    |
-| **Boost.MSM**                | 5.206 s    | 1.139 s        | 399.9 KiB   |
-| **[Boost::ext].SML** v1.1.10 | 2.687 s    | 0.229 s        | 755.7 KiB   |
+| **Maki** 0.4.6               | 2.637 s    | 0.158 s        | 25.6 KiB    |
+| **Boost.MSM**                | 5.179 s    | 1.207 s        | 399.8 KiB   |
+| **[Boost::ext].SML** v1.1.10 | 2.620 s    | 0.294 s        | 755.7 KiB   |
 
 ## The Test
 

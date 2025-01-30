@@ -25,9 +25,8 @@ struct internal_transition_event
 
 template<int Index>
 constexpr auto state_conf = maki::state_conf{}
-    .internal_action_ce
+    .internal_action_ce<internal_transition_event>
     (
-        maki::type<internal_transition_event>,
         [](context& ctx, const internal_transition_event& evt)
         {
             ctx.counter /= evt.two;
@@ -43,32 +42,32 @@ constexpr auto state_conf = maki::state_conf{}
 ;
 
 template<int Index>
-void state_transition_action(context& ctx, const state_transition_event<Index>& evt)
+constexpr auto state_transition_action = maki::action_ce([](context& ctx, const state_transition_event<Index>& evt)
 {
     ctx.counter = (ctx.counter + 1) * evt.two;
-}
+});
 
 template<int Index>
-bool guard(context& /*ctx*/, const state_transition_event<Index>& evt)
+constexpr auto guard = maki::guard_e([](const state_transition_event<Index>& evt)
 {
     return evt.two >= 0;
-}
+});
 
 constexpr auto transition_table = maki::transition_table{}
 #define X(N) \
-    (state_conf<N>, maki::type<state_transition_event<N>>, state_conf<(N + 1) % PROBLEM_SIZE>, state_transition_action<N>, guard<N>)
+    (state_conf<N>, maki::event<state_transition_event<N>>, state_conf<(N + 1) % PROBLEM_SIZE>, state_transition_action<N>, guard<N>)
     COUNTER
 #undef X
 ;
 
 constexpr auto machine_conf = maki::machine_conf{}
     .transition_tables(transition_table)
-    .context_a(maki::type<context>)
+    .context_a<context>()
     .small_event_max_size(sizeof(int))
     .process_event_now_enabled(true)
 ;
 
-using sm_t = maki::make_machine<machine_conf>;
+using sm_t = maki::machine<machine_conf>;
 
 int test()
 {
