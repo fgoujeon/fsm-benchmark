@@ -24,7 +24,7 @@ struct internal_transition_event
 };
 
 template<int Index>
-constexpr auto state = maki::state_builder{}
+constexpr auto state = maki::state_mold{}
     .internal_action_ce<internal_transition_event>
     (
         [](context& ctx, const internal_transition_event& evt)
@@ -54,7 +54,7 @@ constexpr auto guard = maki::guard_e([](const state_transition_event<Index>& evt
 });
 
 constexpr auto transition_table = maki::transition_table{}
-    (maki::init, state<0>)
+    (maki::ini, state<0>)
 #define X(N) \
     (state<N>, state<(N + 1) % PROBLEM_SIZE>, maki::event<state_transition_event<N>>, state_transition_action<N>, guard<N>)
     COUNTER

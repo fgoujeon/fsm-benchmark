@@ -27,15 +27,15 @@ py run-benchmarks.py %BUILD_DIR% 3 -G "Visual Studio 17 2022" -A "x64" -D Boost_
 Best results of 3 iterations:
 |                              | Build time | Execution time | Binary size |
 |------------------------------|-----------:|---------------:|------------:|
-| **Maki** 0.4.9               | 7.822 s    | 0.653 s        | 19.5 KiB    |
-| **Boost.MSM**                | 24.125 s   | 4.369 s        | 61.0 KiB    |
-| **[Boost::ext].SML** v1.1.10 | 6.639 s    | 0.799 s        | 48.5 KiB    |
+| **Maki** 1.0.0               | 7.516 s    | 0.641 s        | 20.0 KiB    |
+| **Boost.MSM**                | 24.314 s   | 4.288 s        | 60.5 KiB    |
+| **[Boost::ext].SML** v1.1.10 | 6.865 s    | 0.803 s        | 48.0 KiB    |
 
 ### GCC
 
 * Hardware: AMD Ryzen 7 7800X3D, 32 GiB RAM
-* System: Linux 6.12.6-arch1-1
-* Compiler: GCC 14.2.1
+* System: Linux 6.16.5-arch1-1
+* Compiler: GCC 15.2.1
 
 ```bash
 CXX=g++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D FSMB_FORCED_CXX_STANDARD=20
@@ -44,15 +44,15 @@ CXX=g++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D F
 Best results of 3 iterations:
 |                              | Build time | Execution time | Binary size |
 |------------------------------|-----------:|---------------:|------------:|
-| **Maki** 0.4.9               | 1.118 s    | 0.151 s        | 24.8 KiB    |
-| **Boost.MSM**                | 6.212 s    | 1.124 s        | 331.8 KiB   |
-| **[Boost::ext].SML** v1.1.10 | 2.209 s    | 0.212 s        | 586.6 KiB   |
+| **Maki** 1.0.0               | 1.477 s    | 0.256 s        | 24.8 KiB    |
+| **Boost.MSM**                | 5.636 s    | 1.029 s        | 332.2 KiB   |
+| **[Boost::ext].SML** v1.1.10 | 2.439 s    | 0.220 s        | 606.5 KiB   |
 
 ### Clang
 
 * Hardware: AMD Ryzen 7 7800X3D, 32 GiB RAM
-* System: Linux 6.12.6-arch1-1
-* Compiler: Clang 19.1.7
+* System: Linux 6.16.5-arch1-1
+* Compiler: Clang 20.1.8
 
 ```bash
 CXX=clang++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D FSMB_FORCED_CXX_STANDARD=20
@@ -61,9 +61,9 @@ CXX=clang++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release 
 Best results of 3 iterations:
 |                              | Build time | Execution time | Binary size |
 |------------------------------|-----------:|---------------:|------------:|
-| **Maki** 0.4.9               | 2.690 s    | 0.146 s        | 24.7 KiB    |
-| **Boost.MSM**                | 5.244 s    | 1.160 s        | 399.8 KiB   |
-| **[Boost::ext].SML** v1.1.10 | 2.632 s    | 0.260 s        | 755.7 KiB   |
+| **Maki** 1.0.0               | 2.564 s    | 0.135 s        | 24.6 KiB    |
+| **Boost.MSM**                | 5.291 s    | 1.092 s        | 399.8 KiB   |
+| **[Boost::ext].SML** v1.1.10 | 2.579 s    | 0.203 s        | 751.6 KiB   |
 
 ## The Test
 
