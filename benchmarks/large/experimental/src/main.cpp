@@ -13,7 +13,7 @@ namespace libfsm
 {
     using state_index = int;
 
-    template<class Context, class StateTypeList, class TransitionTypeList>
+    template<class Context, const auto& StateMoldPtrs, class TransitionTypeList>
     class machine
     {
     public:
@@ -52,6 +52,9 @@ namespace libfsm
             machine&,
             sizeof(int)>;
 
+        using state_mold_ptr_constant_list =
+            maki::detail::tuple_to_element_ptr_constant_list_t<StateMoldPtrs>;
+
         struct any_event_visitor
         {
             template<class Event>
@@ -65,31 +68,44 @@ namespace libfsm
         void process_one_event(const Event& event)
         {
             maki::detail::tlu::apply_t<
-                StateTypeList,
+                state_mold_ptr_constant_list,
                 process_event_in_active_state>::call(*this, event) ||
             maki::detail::tlu::apply_t<
                 TransitionTypeList,
                 process_event_in_transition_table>::call(*this, event);
         }
 
-        template<class... States>
+        template<class... StateMoldPtrConstants>
         struct process_event_in_active_state
         {
             template<class Event>
             static bool call(machine& self, const Event& event)
             {
-                return (self.template try_process_event_in_state<States>(event) || ...);
+                return (
+                    self.template try_process_event_in_state<StateMoldPtrConstants>(event) ||
+                    ...);
             }
         };
 
-        template<class State, class Event>
+        template<class StateMoldPtrConstant, class Event>
         bool try_process_event_in_state(const Event& event)
         {
-            if constexpr (std::is_same_v<Event, typename State::event_type>)
+            constexpr const auto& state_mold = **StateMoldPtrConstant::value;
+            constexpr const auto& internal_actions =
+                maki::detail::impl_of(state_mold).internal_actions;
+            constexpr const auto& internal_action =
+                maki::detail::tuple_get<0>(internal_actions);
+
+            if constexpr (internal_action.evt_set.template contains<Event>())
             {
-                if (State::index == active_state_index_)
+                constexpr auto state_index =
+                    maki::detail::tlu::find_v<
+                        state_mold_ptr_constant_list,
+                    StateMoldPtrConstant>;
+
+                if (state_index == active_state_index_)
                 {
-                    State::execute_internal_action(ctx_, event);
+                    internal_action.action(ctx_, event);
                     return true;
                 }
             }
@@ -111,12 +127,21 @@ namespace libfsm
         {
             if constexpr (std::is_same_v<Event, typename Transition::event_type>)
             {
-                using state_type = maki::detail::tlu::get_t<StateTypeList, Transition::source_state_index>;
+                using source_state_mold_ptr_constant =
+                    maki::detail::tlu::get_t<
+                        state_mold_ptr_constant_list,
+                        Transition::source_state_index>;
+                constexpr const auto& source_state_mold =
+                    **source_state_mold_ptr_constant::value;
+                constexpr const auto& source_state_exit_actions =
+                    maki::detail::impl_of(source_state_mold).exit_actions;
+                constexpr const auto& source_state_exit_action =
+                    maki::detail::tuple_get<0>(source_state_exit_actions);
 
                 if (active_state_index_ == Transition::source_state_index && Transition::grd(event))
                 {
                     Transition::act(ctx_, event);
-                    state_type::execute_exit_action(*this);
+                    source_state_exit_action.action(*this);
                     active_state_index_ = Transition::target_state_index;
                     return true;
                 }
@@ -152,23 +177,17 @@ struct internal_transition_event
 };
 
 template<int Index>
-struct state
-{
-    using event_type = internal_transition_event;
-
-    static void execute_internal_action(context& ctx, const internal_transition_event& evt)
-    {
-        ctx.counter /= evt.two;
-    }
-
-    template<class Machine>
-    static void execute_exit_action(Machine& mach)
-    {
-        mach.process_event(internal_transition_event{});
-    }
-
-    static constexpr auto index = Index;
-};
+constexpr auto state = maki::state_mold{}
+    .internal_action_ce<internal_transition_event>(
+        [](context& ctx, const internal_transition_event& evt)
+        {
+            ctx.counter /= evt.two;
+        })
+    .exit_action_m(
+        [](auto& mach)
+        {
+            mach.process_event(internal_transition_event{});
+        });
 
 template<int Index>
 void state_transition_action(context& ctx, const state_transition_event<Index>& evt)
@@ -192,12 +211,13 @@ struct transition
     static constexpr auto act = &state_transition_action<Index>;
 };
 
-using state_type_list = maki::detail::type_list_t<
+constexpr auto state_mold_ptrs = maki::detail::make_tuple(
+    maki::detail::distributed_construct
 #define X(N) \
-    COMMA_IF_NOT_0(N) state<N>
+    , &state<N>
     COUNTER
 #undef X
->;
+);
 
 using transition_type_list = maki::detail::type_list_t<
 #define X(N) \
@@ -208,7 +228,7 @@ using transition_type_list = maki::detail::type_list_t<
 
 int test()
 {
-    auto sm = libfsm::machine<context, state_type_list, transition_type_list>{};
+    auto sm = libfsm::machine<context, state_mold_ptrs, transition_type_list>{};
 
     for(auto i = 0; i < test_loop_size; ++i)
     {
