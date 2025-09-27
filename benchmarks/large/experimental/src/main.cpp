@@ -9,6 +9,128 @@
 #include <functional>
 #include <queue>
 
+namespace libfsm
+{
+    using state_index = int;
+
+    template<class Context, class StateTypeList, class TransitionTypeList>
+    class machine
+    {
+    public:
+        template<class Event>
+        void process_event(const Event& event)
+        {
+            if (!processing_event_)
+            {
+                process_event_now(event);
+            }
+            else
+            {
+                processing_queue_.template push<any_event_visitor>(event);
+            }
+        }
+
+        template<class Event>
+        void process_event_now(const Event& event)
+        {
+            processing_event_ = true;
+
+            process_one_event(event);
+
+            processing_queue_.invoke_and_pop_all(*this);
+
+            processing_event_ = false;
+        }
+
+        Context& context()
+        {
+            return ctx_;
+        }
+
+    private:
+        using processing_queue_type = maki::detail::function_queue<
+            machine&,
+            sizeof(int)>;
+
+        struct any_event_visitor
+        {
+            template<class Event>
+            static void call(const Event& event, machine& self)
+            {
+                self.process_one_event(event);
+            }
+        };
+
+        template<class Event>
+        void process_one_event(const Event& event)
+        {
+            maki::detail::tlu::apply_t<
+                StateTypeList,
+                process_event_in_active_state>::call(*this, event) ||
+            maki::detail::tlu::apply_t<
+                TransitionTypeList,
+                process_event_in_transition_table>::call(*this, event);
+        }
+
+        template<class... States>
+        struct process_event_in_active_state
+        {
+            template<class Event>
+            static bool call(machine& self, const Event& event)
+            {
+                return (self.template try_process_event_in_state<States>(event) || ...);
+            }
+        };
+
+        template<class State, class Event>
+        bool try_process_event_in_state(const Event& event)
+        {
+            if (State::index == active_state_index_)
+            {
+                return State::try_execute_internal_action(ctx_, event);
+            }
+            return false;
+        }
+
+        template<class... Transitions>
+        struct process_event_in_transition_table
+        {
+            template<class Event>
+            static bool call(machine& self, const Event& event)
+            {
+                return (self.try_execute_transition<Transitions>(event) || ...);
+            }
+        };
+
+        template<class Transition, class Event>
+        bool try_execute_transition(const Event& event)
+        {
+            if constexpr (std::is_same_v<Event, typename Transition::event_type>)
+            {
+                using state_type = maki::detail::tlu::get_t<StateTypeList, Transition::source_state_index>;
+
+                if (active_state_index_ == Transition::source_state_index && Transition::grd(event))
+                {
+                    Transition::act(ctx_, event);
+                    state_type::execute_exit_action(*this);
+                    active_state_index_ = Transition::target_state_index;
+                    return true;
+                }
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        Context ctx_;
+        state_index active_state_index_ = 0;
+        processing_queue_type processing_queue_;
+        bool processing_event_ = false;
+    };
+}
+
 struct context
 {
     int counter = 0;
@@ -61,153 +183,33 @@ bool guard(const state_transition_event<Index>& evt)
     return evt.two >= 0;
 }
 
-namespace libfsm
+template<int Index>
+struct transition
 {
-    using state_index = int;
+    static constexpr auto source_state_index = Index;
+    static constexpr auto target_state_index = (Index + 1) % PROBLEM_SIZE;
+    using event_type = state_transition_event<Index>;
+    static constexpr auto grd = &guard<Index>;
+    static constexpr auto act = &state_transition_action<Index>;
+};
 
-    template<int Index>
-    struct transition
-    {
-        static constexpr auto source_state_index = Index;
-        static constexpr auto target_state_index = (Index + 1) % PROBLEM_SIZE;
-        using event_type = state_transition_event<Index>;
-        static constexpr auto grd = &guard<Index>;
-        static constexpr auto act = &state_transition_action<Index>;
-    };
-
-    using state_type_list = maki::detail::type_list_t<
+using state_type_list = maki::detail::type_list_t<
 #define X(N) \
     COMMA_IF_NOT_0(N) state<N>
-        COUNTER
+    COUNTER
 #undef X
-    >;
+>;
 
-    using transition_type_list = maki::detail::type_list_t<
+using transition_type_list = maki::detail::type_list_t<
 #define X(N) \
     COMMA_IF_NOT_0(N) transition<N>
-        COUNTER
+    COUNTER
 #undef X
-    >;
-
-    template<class Context>
-    class machine
-    {
-    public:
-        template<class Event>
-        void process_event(const Event& event)
-        {
-            if (!processing_event_)
-            {
-                process_event_now(event);
-            }
-            else
-            {
-                processing_queue_.template push<any_event_visitor>(event);
-            }
-        }
-
-        template<class Event>
-        void process_event_now(const Event& event)
-        {
-            processing_event_ = true;
-
-            process_one_event(event);
-
-            processing_queue_.invoke_and_pop_all(*this);
-
-            processing_event_ = false;
-        }
-
-        Context& context()
-        {
-            return ctx_;
-        }
-
-    private:
-        using processing_queue_type = maki::detail::function_queue<
-            machine&,
-            sizeof(int)>;
-
-        struct any_event_visitor
-        {
-            template<class Event>
-            static void call(const Event& event, machine& self)
-            {
-                self.process_one_event(event);
-            }
-        };
-
-        template<class Event>
-        void process_one_event(const Event& event)
-        {
-            maki::detail::tlu::apply_t<
-                state_type_list,
-                process_event_in_active_state>::call(*this, event) ||
-            maki::detail::tlu::apply_t<
-                transition_type_list,
-                process_event_in_transition_table>::call(*this, event);
-        }
-
-        template<class... States>
-        struct process_event_in_active_state
-        {
-            template<class Event>
-            static bool call(machine& self, const Event& event)
-            {
-                return (self.template try_process_event_in_state<States>(event) || ...);
-            }
-        };
-
-        template<class State, class Event>
-        bool try_process_event_in_state(const Event& event)
-        {
-            if (State::index == active_state_index_)
-            {
-                return State::try_execute_internal_action(ctx_, event);
-            }
-            return false;
-        }
-
-        template<class... Transitions>
-        struct process_event_in_transition_table
-        {
-            template<class Event>
-            static bool call(machine& self, const Event& event)
-            {
-                return (self.try_execute_transition<Transitions>(event) || ...);
-            }
-        };
-
-        template<class Transition, class Event>
-        bool try_execute_transition(const Event& event)
-        {
-            if constexpr (std::is_same_v<Event, typename Transition::event_type>)
-            {
-                if (active_state_index_ == Transition::source_state_index && Transition::grd(event))
-                {
-                    Transition::act(ctx_, event);
-                    state<Transition::source_state_index>::execute_exit_action(*this);
-                    active_state_index_ = Transition::target_state_index;
-                    return true;
-                }
-                return false;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        Context ctx_;
-        state_index active_state_index_ = 0;
-        processing_queue_type processing_queue_;
-        bool processing_event_ = false;
-    };
-}
+>;
 
 int test()
 {
-    auto sm = libfsm::machine<context>{};
+    auto sm = libfsm::machine<context, state_type_list, transition_type_list>{};
 
     for(auto i = 0; i < test_loop_size; ++i)
     {
