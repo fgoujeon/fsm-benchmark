@@ -68,20 +68,11 @@ namespace libfsm
     template<int Index>
     struct transition
     {
+        static constexpr auto source_state_index = Index;
+        static constexpr auto target_state_index = (Index + 1) % PROBLEM_SIZE;
         using event_type = state_transition_event<Index>;
-
-        template<class Context, class Machine>
-        static bool try_execute(Context& ctx, Machine& mach, state_index& active_state_index, const state_transition_event<Index>& event)
-        {
-            if (active_state_index == Index && guard<Index>(event))
-            {
-                state_transition_action<Index>(ctx, event);
-                state<Index>::execute_exit_action(mach);
-                active_state_index = (Index + 1) % PROBLEM_SIZE;
-                return true;
-            }
-            return false;
-        }
+        static constexpr auto grd = &guard<Index>;
+        static constexpr auto act = &state_transition_action<Index>;
     };
 
     using state_type_list = maki::detail::type_list_t<
@@ -192,7 +183,14 @@ namespace libfsm
         {
             if constexpr (std::is_same_v<Event, typename Transition::event_type>)
             {
-                return Transition::try_execute(ctx_, *this, active_state_index_, event);
+                if (active_state_index_ == Transition::source_state_index && Transition::grd(event))
+                {
+                    Transition::act(ctx_, event);
+                    state<Transition::source_state_index>::execute_exit_action(*this);
+                    active_state_index_ = Transition::target_state_index;
+                    return true;
+                }
+                return false;
             }
             else
             {
