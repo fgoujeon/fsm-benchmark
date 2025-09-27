@@ -85,9 +85,13 @@ namespace libfsm
         template<class State, class Event>
         bool try_process_event_in_state(const Event& event)
         {
-            if (State::index == active_state_index_)
+            if constexpr (std::is_same_v<Event, typename State::event_type>)
             {
-                return State::try_execute_internal_action(ctx_, event);
+                if (State::index == active_state_index_)
+                {
+                    State::execute_internal_action(ctx_, event);
+                    return true;
+                }
             }
             return false;
         }
@@ -150,16 +154,11 @@ struct internal_transition_event
 template<int Index>
 struct state
 {
-    template<class Event>
-    static bool try_execute_internal_action(context& /*ctx*/, const Event& /*evt*/)
-    {
-        return false;
-    }
+    using event_type = internal_transition_event;
 
-    static bool try_execute_internal_action(context& ctx, const internal_transition_event& evt)
+    static void execute_internal_action(context& ctx, const internal_transition_event& evt)
     {
         ctx.counter /= evt.two;
-        return true;
     }
 
     template<class Machine>
