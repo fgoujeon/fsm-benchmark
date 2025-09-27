@@ -68,11 +68,7 @@ namespace libfsm
     template<int Index>
     struct transition
     {
-        template<class Context, class Machine, class Event>
-        static bool try_execute(Context& /*ctx*/, Machine& /*mach*/, state_index& /*active_state_index*/, const Event& /*event*/)
-        {
-            return false;
-        }
+        using event_type = state_transition_event<Index>;
 
         template<class Context, class Machine>
         static bool try_execute(Context& ctx, Machine& mach, state_index& active_state_index, const state_transition_event<Index>& event)
@@ -187,9 +183,22 @@ namespace libfsm
             template<class Event>
             static bool call(machine& self, const Event& event)
             {
-                return (Transitions::try_execute(self.ctx_, self, self.active_state_index_, event) || ...);
+                return (self.try_execute_transition<Transitions>(event) || ...);
             }
         };
+
+        template<class Transition, class Event>
+        bool try_execute_transition(const Event& event)
+        {
+            if constexpr (std::is_same_v<Event, typename Transition::event_type>)
+            {
+                return Transition::try_execute(ctx_, *this, active_state_index_, event);
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         Context ctx_;
         state_index active_state_index_ = 0;
