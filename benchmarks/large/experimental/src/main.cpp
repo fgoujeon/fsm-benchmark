@@ -115,11 +115,7 @@ namespace libfsm
             }
             else
             {
-                processing_queue_.push(
-                    [this, event]
-                    {
-                        process_one_event(event);
-                    });
+                processing_queue_.template push<any_event_visitor>(event);
             }
         }
 
@@ -130,11 +126,7 @@ namespace libfsm
 
             process_one_event(event);
 
-            while (!processing_queue_.empty())
-            {
-                processing_queue_.front()();
-                processing_queue_.pop();
-            }
+            processing_queue_.invoke_and_pop_all(*this);
 
             processing_event_ = false;
         }
@@ -145,6 +137,19 @@ namespace libfsm
         }
 
     private:
+        using processing_queue_type = maki::detail::function_queue<
+            machine&,
+            sizeof(int)>;
+
+        struct any_event_visitor
+        {
+            template<class Event>
+            static void call(const Event& event, machine& self)
+            {
+                self.process_one_event(event);
+            }
+        };
+
         template<class Event>
         void process_one_event(const Event& event)
         {
@@ -188,7 +193,7 @@ namespace libfsm
 
         Context ctx_;
         state_index active_state_index_ = 0;
-        std::queue<std::function<void()>> processing_queue_;
+        processing_queue_type processing_queue_;
         bool processing_event_ = false;
     };
 }
