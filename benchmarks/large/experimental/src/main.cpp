@@ -87,7 +87,10 @@ namespace libfsm
         {
             if constexpr (std::is_same_v<Event, typename State::event_type>)
             {
-                if (State::index == active_state_index_)
+                constexpr auto state_index =
+                    maki::detail::tlu::find_v<StateTypeList, State>;
+
+                if (state_index == active_state_index_)
                 {
                     State::execute_internal_action(ctx_, event);
                     return true;
@@ -166,8 +169,6 @@ struct state
     {
         mach.process_event(internal_transition_event{});
     }
-
-    static constexpr auto index = Index;
 };
 
 template<int Index>
