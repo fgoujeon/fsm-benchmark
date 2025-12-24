@@ -162,8 +162,9 @@ cmake_extra_options = sys.argv[3:]
 #List the libraries we want to test
 libraries = [
     make_library_info("Maki", "maki"),
-    make_library_info("Boost.MSM", "msm"),
-    make_library_info("[Boost::ext].SML", "sml")]
+    make_library_info("MSM", "msm"),
+    make_library_info("MSM (`backmp11`)", "msm-backmp11"),
+    make_library_info("SML", "sml")]
 
 #Get library versions
 for library in libraries:
