@@ -16,54 +16,57 @@ Tested libraries are:
 
 ### Visual Studio
 
-* Hardware: AMD Ryzen 5 1600, 8.0 GiB RAM
+* Hardware: AMD Ryzen 5 1600, 8 GiB RAM
 * System: Windows 10
 * Compiler: Visual Studio 2022
 
 ```batch
-py run-benchmarks.py %BUILD_DIR% 3 -G "Visual Studio 17 2022" -A "x64" -D Boost_INCLUDE_DIR=%BOOST_INCLUDE_DIR% -D FSMB_FORCED_CXX_STANDARD=20
+python run-benchmarks.py %BUILD_DIR% 3 -G "Visual Studio 17 2022" -A "x64" -D FSMB_MSM_INCLUDE_DIR=%BOOST_INCLUDE_DIR% -D FSMB_FORCED_CXX_STANDARD=20
 ```
 
 Best results of 3 iterations:
-|                              | Build time | Execution time | Binary size |
-|------------------------------|-----------:|---------------:|------------:|
-| **Maki** 1.0.4               | 6.553 s    | 0.399 s        | 19.5 KiB    |
-| **Boost.MSM**                | 23.710 s   | 4.227 s        | 60.5 KiB    |
-| **[Boost::ext].SML** v1.1.10 | 6.830 s    | 0.829 s        | 48.0 KiB    |
+|                             | Build time | Execution time | Binary size |
+|-----------------------------|-----------:|---------------:|------------:|
+| **Maki** 1.0.4              | 6.695 s    | 0.394 s        | 19.5 KiB    |
+| **MSM** 1.90.0              | 24.124 s   | 1.411 s        | 59.0 KiB    |
+| **MSM (`backmp11`)** 1.90.0 | 6.423 s    | 1.196 s        | 60.0 KiB    |
+| **SML** 1.1.10              | 6.849 s    | 0.810 s        | 48.0 KiB    |
 
 ### GCC
 
 * Hardware: AMD Ryzen 7 7800X3D, 32 GiB RAM
-* System: Linux 6.17.3-arch2-1
+* System: Linux 6.18.2-arch2-1
 * Compiler: GCC 15.2.1
 
 ```bash
-CXX=g++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D FSMB_FORCED_CXX_STANDARD=20
+CXX=g++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D FSMB_MSM_INCLUDE_DIR=${MSM_INCLUDE_DIR} -D FSMB_FORCED_CXX_STANDARD=20
 ```
 
 Best results of 3 iterations:
-|                              | Build time | Execution time | Binary size |
-|------------------------------|-----------:|---------------:|------------:|
-| **Maki** 1.0.4               | 1.153 s    | 0.258 s        | 24.8 KiB    |
-| **Boost.MSM**                | 5.622 s    | 1.043 s        | 332.2 KiB   |
-| **[Boost::ext].SML** v1.1.10 | 2.443 s    | 0.218 s        | 606.5 KiB   |
+|                             | Build time | Execution time | Binary size |
+|-----------------------------|-----------:|---------------:|------------:|
+| **Maki** 1.0.4              | 1.184 s    | 0.259 s        | 24.8 KiB    |
+| **MSM** 1.90.0              | 5.622 s    | 1.032 s        | 332.2 KiB   |
+| **MSM (`backmp11`)** 1.90.0 | 2.011 s    | 0.444 s        | 168.0 KiB   |
+| **SML** 1.1.10              | 2.479 s    | 0.218 s        | 606.5 KiB   |
 
 ### Clang
 
 * Hardware: AMD Ryzen 7 7800X3D, 32 GiB RAM
-* System: Linux 6.17.3-arch2-1
-* Compiler: Clang 20.1.8
+* System: Linux 6.18.2-arch2-1
+* Compiler: Clang 21.1.6
 
 ```bash
-CXX=clang++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D FSMB_FORCED_CXX_STANDARD=20
+CXX=clang++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D FSMB_MSM_INCLUDE_DIR=${MSM_INCLUDE_DIR} -D FSMB_FORCED_CXX_STANDARD=20
 ```
 
 Best results of 3 iterations:
-|                              | Build time | Execution time | Binary size |
-|------------------------------|-----------:|---------------:|------------:|
-| **Maki** 1.0.4               | 1.874 s    | 0.134 s        | 24.6 KiB    |
-| **Boost.MSM**                | 5.319 s    | 1.091 s        | 399.8 KiB   |
-| **[Boost::ext].SML** v1.1.10 | 2.612 s    | 0.202 s        | 751.6 KiB   |
+|                             | Build time | Execution time | Binary size |
+|-----------------------------|-----------:|---------------:|------------:|
+| **Maki** 1.0.4              | 1.908 s    | 0.134 s        | 24.6 KiB    |
+| **MSM** 1.90.0              | 5.418 s    | 1.087 s        | 399.8 KiB   |
+| **MSM (`backmp11`)** 1.90.0 | 1.684 s    | 0.586 s        | 139.5 KiB   |
+| **SML** 1.1.10              | 2.651 s    | 0.204 s        | 751.6 KiB   |
 
 ## The Test
 

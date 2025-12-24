@@ -10,11 +10,11 @@ project(fsm-benchmark)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+set(FSMB_MSM_INCLUDE_DIR "" CACHE PATH "Path to MSM include dir")
 set(FSMB_FORCED_CXX_STANDARD "" CACHE STRING "If set, overwrites CXX_STANDARD property of all targets")
 
 set(FSMB_MAKI_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/libraries/maki/include)
 set(FSMB_SML_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/libraries/sml/include)
 
-find_package(Boost 1.64.0 REQUIRED)
-
+add_subdirectory(version-getters)
 add_subdirectory(benchmarks)
