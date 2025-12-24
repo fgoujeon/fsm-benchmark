@@ -4,5 +4,8 @@
 #https://www.boost.org/LICENSE_1_0.txt)
 #Official repository: https://github.com/fgoujeon/fsm-benchmark
 
-add_subdirectory(large)
-add_subdirectory(deep)
+add_subdirectory(common)
+add_subdirectory(maki)
+add_subdirectory(msm)
+add_subdirectory(msm-backmp11)
+add_subdirectory(sml)

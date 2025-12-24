@@ -17,14 +17,19 @@ class TestResult:
     size_KiB: float
 
 @dataclass
+class BenchmarkInfo:
+    pretty_name: str
+    name: str #e.g. for directories
+
+@dataclass
 class LibraryInfo:
     pretty_name: str
     name: str #e.g. for directories
     version: str
-    test_result: TestResult
+    test_results: dict[str, TestResult]
 
 def make_library_info(pretty_name, name):
-    return LibraryInfo(pretty_name, name, None, None)
+    return LibraryInfo(pretty_name, name, None, {})
 
 def get_executable_path(build_dir, executable_target_name):
     unix_executable_path = os.path.join(build_dir, "bin", executable_target_name)
@@ -144,23 +149,30 @@ def print_as_markdown(headers, rows):
             print_no_ln(" ")
         print("|")
 
-def print_test_results(libraries):
+def print_benchmark_test_result(libraries, benchmark):
     #Format library infos
     formatted_library_infos = []
     for library in libraries:
         formatted_library_infos.append(
             [
                 "**%s** %s" % (library.pretty_name, library.version),
-                "%0.3f s" % library.test_result.build_time_s,
-                "%0.3f s" % library.test_result.execution_time_s,
-                "%0.1f KiB" % library.test_result.size_KiB
+                "%0.3f s" % library.test_results[benchmark.name].build_time_s,
+                "%0.3f s" % library.test_results[benchmark.name].execution_time_s,
+                "%0.1f KiB" % library.test_results[benchmark.name].size_KiB
             ]
         )
 
+    print(f"#### {benchmark.pretty_name}")
+    print()
+    print("Best results of", iteration_count, "iterations:")
     print_as_markdown(
         ["", "Build time", "Execution time", "Binary size"],
-        formatted_library_infos
-    )
+        formatted_library_infos)
+    print()
+
+def print_test_results(libraries, benchmarks):
+    for benchmark in benchmarks:
+        print_benchmark_test_result(libraries, benchmark)
 
 if len(sys.argv) < 3:
     print("Usage: run-benchmarks.py BUILD_DIR ITERATION_COUNT [CMAKE_EXTRA_OPTIONS...]")
@@ -178,6 +190,11 @@ libraries = [
     make_library_info("MSM (`backmp11`)", "msm-backmp11"),
     make_library_info("SML", "sml")]
 
+# List the benchmarks
+benchmarks = [
+    BenchmarkInfo("Large FSM", "large"),
+    BenchmarkInfo("Deep FSM", "deep")]
+
 # Initialize CMake
 cmake_command = ["cmake", "-S", src_dir, "-B", build_dir] + cmake_extra_options
 subprocess.run(cmake_command)
@@ -189,15 +206,15 @@ for library in libraries:
 # Run tests
 for iteration_index in range(iteration_count):
     for library in libraries:
-        print("===== " + library.pretty_name + ", iteration " + str(iteration_index + 1) + "/" + str(iteration_count) + " =====")
-        result = test(library.name)
-        print("Built in %0.3f s" % result.build_time_s)
-        print("Executed in %0.3f s" % result.execution_time_s)
-        print("Binary size is %0.1f KiB" % result.size_KiB)
-        print()
-        library.test_result = merge_to_best(library.test_result, result)
+        for benchmark in benchmarks:
+            print(f"===== {library.pretty_name}, {benchmark.pretty_name}, iteration {iteration_index + 1}/{iteration_count} =====")
+            result = test(library.name)
+            print("Built in %0.3f s" % result.build_time_s)
+            print("Executed in %0.3f s" % result.execution_time_s)
+            print("Binary size is %0.1f KiB" % result.size_KiB)
+            print()
+            library.test_results[benchmark.name] = merge_to_best(library.test_results.get(benchmark.name), result)
 
 # Print test results in markdown format
 print("===== Final Results (markdown format) =====")
-print("Best results of", iteration_count, "iterations:")
-print_test_results(libraries)
+print_test_results(libraries, benchmarks)
