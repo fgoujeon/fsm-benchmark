@@ -4,71 +4,72 @@
 //https://www.boost.org/LICENSE_1_0.txt)
 //Official repository: https://github.com/fgoujeon/fsm-benchmark
 
-#define PROBLEM_SIZE 25
-#define PROBLEM_SIZE_X_2 50
+#include <iostream>
 
 #define COUNTER \
-    X(0) \
-    X(1) \
-    X(2) \
-    X(3) \
-    X(4) \
-    X(5) \
-    X(6) \
-    X(7) \
-    X(8) \
-    X(9) \
-    X(10) \
-    X(11) \
-    X(12) \
-    X(13) \
-    X(14) \
-    X(15) \
-    X(16) \
-    X(17) \
-    X(18) \
-    X(19) \
-    X(20) \
-    X(21) \
-    X(22) \
-    X(23) \
-    X(24)
+    X(0, 0, 0) \
+    X(0, 0, 1) \
+    X(0, 0, 2) \
+    X(0, 1, 0) \
+    X(0, 1, 1) \
+    X(0, 1, 2) \
+    X(0, 2, 0) \
+    X(0, 2, 1) \
+    X(0, 2, 2) \
+    X(1, 0, 0) \
+    X(1, 0, 1) \
+    X(1, 0, 2) \
+    X(1, 1, 0) \
+    X(1, 1, 1) \
+    X(1, 1, 2) \
+    X(1, 2, 0) \
+    X(1, 2, 1) \
+    X(1, 2, 2) \
+    X(2, 0, 0) \
+    X(2, 0, 1) \
+    X(2, 0, 2) \
+    X(2, 1, 0) \
+    X(2, 1, 1) \
+    X(2, 1, 2) \
+    X(2, 2, 0) \
+    X(2, 2, 1) \
+    X(2, 2, 2)
 
-#define COMMA_0
-#define COMMA_1  ,
-#define COMMA_2  ,
-#define COMMA_3  ,
-#define COMMA_4  ,
-#define COMMA_5  ,
-#define COMMA_6  ,
-#define COMMA_7  ,
-#define COMMA_8  ,
-#define COMMA_9  ,
-#define COMMA_10 ,
-#define COMMA_11 ,
-#define COMMA_12 ,
-#define COMMA_13 ,
-#define COMMA_14 ,
-#define COMMA_15 ,
-#define COMMA_16 ,
-#define COMMA_17 ,
-#define COMMA_18 ,
-#define COMMA_19 ,
-#define COMMA_20 ,
-#define COMMA_21 ,
-#define COMMA_22 ,
-#define COMMA_23 ,
-#define COMMA_24 ,
-
-#define COMMA_IF_NOT_0(N) COMMA_##N
+constexpr auto level_0_state_count = 3;
+constexpr auto level_1_state_count = 3;
+constexpr auto level_2_state_count = 3;
 
 constexpr auto test_loop_size = 1000;
+
+constexpr int compute_internal_event_value(int x, int y, int z)
+{
+    return (x * level_1_state_count) + (y * level_2_state_count) + z + 1;
+}
+
+constexpr int compute_expected_counter()
+{
+    auto counter = 0;
+
+    for (auto x = 0; x < level_0_state_count; ++x)
+    {
+        for (auto y = 0; y < level_1_state_count; ++y)
+        {
+            for (auto z = 0; z < level_2_state_count; ++z)
+            {
+                counter += compute_internal_event_value(x, y, z);
+            }
+        }
+    }
+
+    return counter;
+}
 
 int test();
 
 int main()
 {
     constexpr auto main_loop_size = 1000;
+    constexpr auto expected_counter = main_loop_size * test_loop_size * compute_expected_counter();
 
     auto counter = 0;
 
@@ -77,7 +78,8 @@ int main()
         counter += test();
     }
 
-    constexpr auto expected_counter = test_loop_size * main_loop_size * PROBLEM_SIZE;
+    std::cout << "counter = " << counter << '\n';
+    std::cout << "expected_counter = " << expected_counter << '\n';
 
     if(counter != expected_counter)
     {

@@ -64,7 +64,7 @@ def merge_to_best(res1, res2):
         min(res1.execution_time_s, res2.execution_time_s),
         min(res1.size_KiB, res2.size_KiB))
 
-def test(lib_name):
+def test(lib_name, benchmark_name):
     #Build benchmark
     start_time = time.time()
     subprocess.run([
@@ -72,12 +72,12 @@ def test(lib_name):
         "--build", build_dir,
         "--clean-first",
         "--config", "Release",
-        "--target", "large-" + lib_name])
+        "--target", f"{benchmark_name}-{lib_name}"])
     end_time = time.time()
     build_time_s = end_time - start_time
 
-    unix_executable_path = os.path.join(build_dir, "bin", "large-" + lib_name)
-    win_executable_path = os.path.join(build_dir, "bin", "Release", "large-" + lib_name + ".exe")
+    unix_executable_path = os.path.join(build_dir, "bin", f"{benchmark_name}-{lib_name}")
+    win_executable_path = os.path.join(build_dir, "bin", "Release", f"{benchmark_name}-{lib_name}.exe")
     if os.path.exists(unix_executable_path):
         executable_path = unix_executable_path
     elif os.path.exists(win_executable_path):
@@ -162,9 +162,7 @@ def print_benchmark_test_result(libraries, benchmark):
             ]
         )
 
-    print(f"#### {benchmark.pretty_name}")
-    print()
-    print("Best results of", iteration_count, "iterations:")
+    print(f"{benchmark.pretty_name} (best of {iteration_count} runs):")
     print_as_markdown(
         ["", "Build time", "Execution time", "Binary size"],
         formatted_library_infos)
@@ -185,15 +183,17 @@ cmake_extra_options = sys.argv[3:]
 
 # List the libraries we want to test
 libraries = [
-    make_library_info("Maki", "maki"),
-    make_library_info("MSM", "msm"),
-    make_library_info("MSM (`backmp11`)", "msm-backmp11"),
-    make_library_info("SML", "sml")]
+        make_library_info("Maki", "maki"),
+        make_library_info("MSM", "msm"),
+        make_library_info("MSM (`backmp11`)", "msm-backmp11"),
+        make_library_info("SML", "sml"),
+    ]
 
 # List the benchmarks
 benchmarks = [
-    BenchmarkInfo("Large FSM", "large"),
-    BenchmarkInfo("Deep FSM", "deep")]
+        BenchmarkInfo("Large FSM", "large"),
+        BenchmarkInfo("Deep FSM", "deep"),
+    ]
 
 # Initialize CMake
 cmake_command = ["cmake", "-S", src_dir, "-B", build_dir] + cmake_extra_options
@@ -208,7 +208,7 @@ for iteration_index in range(iteration_count):
     for library in libraries:
         for benchmark in benchmarks:
             print(f"===== {library.pretty_name}, {benchmark.pretty_name}, iteration {iteration_index + 1}/{iteration_count} =====")
-            result = test(library.name)
+            result = test(library.name, benchmark.name)
             print("Built in %0.3f s" % result.build_time_s)
             print("Executed in %0.3f s" % result.execution_time_s)
             print("Binary size is %0.1f KiB" % result.size_KiB)

@@ -8,95 +8,87 @@
 #include <boost/sml.hpp>
 #include <queue>
 
+namespace sml = boost::sml;
+
 struct context
 {
     int counter = 0;
 };
 
-template<int Index>
-struct state_tpl
-{
-};
-
-template<int Index>
+template<int I0, int I1, int I2>
 struct state_transition_event
 {
-    int two = 2;
 };
 
-struct internal_transition_event
+// Level 2 state
+template<int I0, int I1, int I2>
+struct state_2
 {
-    int two = 2;
 };
-
-//Note: Using a constexpr lambda makes the build slightly slower (at least on GCC)
-template<int Index>
-struct state_transition_action
-{
-    void operator()(const state_transition_event<Index>& evt, context& ctx)
+template<int I0, int I1, int I2>
+constexpr auto state_2_exit_action =
+    [](context& ctx)
     {
-        ctx.counter = (ctx.counter + 1) * evt.two;
+        constexpr auto value = compute_internal_event_value(I0, I1, I2);
+        ctx.counter += value;
+    };
+
+// Level 1 state
+template<int I0, int I1>
+struct state_1
+{
+    auto operator()() const noexcept
+    {
+        using namespace sml;
+
+        return make_transition_table(
+            // State transitions
+            *state<state_2<I0, I1, 0>> + event<state_transition_event<I0, I1, 0>> = state<state_2<I0, I1, 1>>
+            ,state<state_2<I0, I1, 1>> + event<state_transition_event<I0, I1, 1>> = state<state_2<I0, I1, 2>>
+            ,state<state_2<I0, I1, 2>> + event<state_transition_event<I0, I1, 2>> = X
+
+            // Exit actions
+            ,state<state_2<I0, I1, 0>> + sml::on_exit<_> / state_2_exit_action<I0, I1, 0>
+            ,state<state_2<I0, I1, 1>> + sml::on_exit<_> / state_2_exit_action<I0, I1, 1>
+            ,state<state_2<I0, I1, 2>> + sml::on_exit<_> / state_2_exit_action<I0, I1, 2>
+            );
     }
 };
 
-//Note: Using a constexpr lambda makes the build slightly slower (at least on GCC)
-template<int Index>
-struct internal_transition_action
-{
-    void operator()(const internal_transition_event& evt, context& ctx)
-    {
-        ctx.counter /= evt.two;
-    }
-};
-
-//Note: Using a constexpr lambda makes the build slightly slower (at least on GCC)
-template<int Index>
-struct exit_action
-{
-    void operator()
-    (
-        boost::sml::back::process<internal_transition_event> process
-    )
-    {
-        process(internal_transition_event{});
-    }
-};
-
-//Note: Using a constexpr lambda makes the build slightly slower (at least on GCC)
-template<int Index>
-struct guard
-{
-    bool operator()(const state_transition_event<Index>& evt)
-    {
-        return evt.two >= 0;
-    }
-};
-
-struct large
+// Level 0 state
+template<int I0>
+struct state_0
 {
     auto operator()() const
     {
         using namespace boost::sml;
 
-        return make_transition_table
-        (
-#define X(N) \
-    COMMA_IF_NOT_0(N) state<state_tpl<N>> + event<state_transition_event<N>> [guard<N>{}] / state_transition_action<N>{} = state<state_tpl<(N + 1) % PROBLEM_SIZE>> \
-    , state<state_tpl<N>> + event<internal_transition_event> / internal_transition_action<N>{}
-            *COUNTER
-#undef X
+        return make_transition_table(
+            *state<state_1<I0, 0>> = state<state_1<I0, 1>>
+            ,state<state_1<I0, 1>> = state<state_1<I0, 2>>
+            ,state<state_1<I0, 2>> = X
+            );
+    }
+};
 
-#define X(N) \
-    , state<state_tpl<N>> + on_exit<_> / exit_action<N>{}
-            COUNTER
-#undef X
-        );
+// Level 0 transition table
+struct transition_table
+{
+    auto operator()() const
+    {
+        using namespace boost::sml;
+
+        return make_transition_table(
+            *state<state_0<0>> = state<state_0<1>>
+            ,state<state_0<1>> = state<state_0<2>>
+            ,state<state_0<2>> = state<state_0<0>>
+            );
     }
 };
 
 using fsm = boost::sml::sm
 <
-    large,
+    transition_table,
     boost::sml::process_queue<std::queue> //Enable run-to-completion
 >;
 
@@ -107,8 +99,8 @@ int test()
 
     for(auto i = 0; i < test_loop_size; ++i)
     {
-#define X(N) \
-    sm.process_event(state_transition_event<N>{});
+#define X(i0, i1, i2) \
+    sm.process_event(state_transition_event<i0, i1, i2>{});
         COUNTER
 #undef X
     }

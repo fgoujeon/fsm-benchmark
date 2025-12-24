@@ -12,62 +12,53 @@ struct context
     int counter = 0;
 };
 
-template<int Index>
+template<int I0, int I1, int I2>
 struct state_transition_event
 {
-    int two = 2;
 };
 
-struct internal_transition_event
-{
-    int two = 2;
-};
-
-template<int Index>
-constexpr auto state = maki::state_mold{}
-    .internal_action_ce<internal_transition_event>
-    (
-        [](context& ctx, const internal_transition_event& evt)
+// Level 2 state
+template<int I0, int I1, int I2>
+constexpr auto state_2 = maki::state_mold{}
+    .exit_action_c(
+        [](auto& ctx)
         {
-            ctx.counter /= evt.two;
-        }
-    )
-    .exit_action_m
-    (
-        [](auto& mach)
-        {
-            mach.push_event(internal_transition_event{});
-        }
-    )
-;
+            constexpr auto value = compute_internal_event_value(I0, I1, I2);
+            ctx.counter += value;
+        });
 
-template<int Index>
-constexpr auto state_transition_action = maki::action_ce([](context& ctx, const state_transition_event<Index>& evt)
-{
-    ctx.counter = (ctx.counter + 1) * evt.two;
-});
+// Level 1 state
+template<int I0, int I1>
+constexpr auto state_1_tt = maki::transition_table{}
+    (maki::ini,          state_2<I0, I1, 0>)
+    (state_2<I0, I1, 0>, state_2<I0, I1, 1>, maki::event<state_transition_event<I0, I1, 0>>)
+    (state_2<I0, I1, 1>, state_2<I0, I1, 2>, maki::event<state_transition_event<I0, I1, 1>>)
+    (state_2<I0, I1, 2>, maki::fin,          maki::event<state_transition_event<I0, I1, 2>>);
+template<int I0, int I1>
+constexpr auto state_1 = maki::state_mold{}
+    .transition_tables(state_1_tt<I0, I1>);
 
-template<int Index>
-constexpr auto guard = maki::guard_e([](const state_transition_event<Index>& evt)
-{
-    return evt.two >= 0;
-});
+// Level 0 state
+template<int I0>
+constexpr auto state_0_tt = maki::transition_table{}
+    (maki::ini,      state_1<I0, 0>)
+    (state_1<I0, 0>, state_1<I0, 1>)
+    (state_1<I0, 1>, state_1<I0, 2>)
+    (state_1<I0, 2>, maki::fin);
+template<int I0>
+constexpr auto state_0 = maki::state_mold{}
+    .transition_tables(state_0_tt<I0>);
 
+// FSM
 constexpr auto transition_table = maki::transition_table{}
-    (maki::ini, state<0>)
-#define X(N) \
-    (state<N>, state<(N + 1) % PROBLEM_SIZE>, maki::event<state_transition_event<N>>, state_transition_action<N>, guard<N>)
-    COUNTER
-#undef X
-;
-
+    (maki::ini,  state_0<0>)
+    (state_0<0>, state_0<1>)
+    (state_0<1>, state_0<2>)
+    (state_0<2>, state_0<0>);
 constexpr auto machine_conf = maki::machine_conf{}
     .transition_tables(transition_table)
     .context_a<context>()
-    .small_event_max_size(sizeof(int))
-    .process_event_now_enabled(true)
-;
-
+    .small_event_max_size(sizeof(int));
 using sm_t = maki::machine<machine_conf>;
 
 int test()
@@ -76,8 +67,8 @@ int test()
 
     for(auto i = 0; i < test_loop_size; ++i)
     {
-#define X(N) \
-    sm.process_event_now(state_transition_event<N>{});
+#define X(i0, i1, i2) \
+    sm.process_event(state_transition_event<i0, i1, i2>{});
         COUNTER
 #undef X
     }
