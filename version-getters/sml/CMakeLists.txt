@@ -10,6 +10,11 @@ file(GLOB_RECURSE SOURCE_FILES *)
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR} FILES ${SOURCE_FILES})
 add_executable(${TARGET} ${SOURCE_FILES})
 
+set_target_properties(
+    ${TARGET} PROPERTIES
+    CXX_STANDARD 14
+)
+
 target_include_directories(
     ${TARGET}
     PRIVATE
