@@ -16,4 +16,5 @@ set(FSMB_FORCED_CXX_STANDARD "" CACHE STRING "If set, overwrites CXX_STANDARD pr
 set(FSMB_MAKI_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/libraries/maki/include)
 set(FSMB_SML_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/libraries/sml/include)
 
+add_subdirectory(version-getters)
 add_subdirectory(benchmarks)

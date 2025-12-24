@@ -26,14 +26,26 @@ class LibraryInfo:
 def make_library_info(pretty_name, name):
     return LibraryInfo(pretty_name, name, None, None)
 
-def get_library_version(lib_name):
-    #Get library version
-    lib_src_dir = os.path.join(src_dir, "libraries", lib_name)
-    if os.path.exists(lib_src_dir):
-        result = subprocess.run(['git', 'describe', "--tags", "--dirty"], cwd = lib_src_dir, stdout = subprocess.PIPE)
-        return result.stdout.decode("utf-8").strip()
+def get_executable_path(build_dir, executable_target_name):
+    unix_executable_path = os.path.join(build_dir, "bin", executable_target_name)
+    win_executable_path = os.path.join(build_dir, "bin", "Release", executable_target_name + ".exe")
+    if os.path.exists(unix_executable_path):
+        return unix_executable_path
+    elif os.path.exists(win_executable_path):
+        return win_executable_path
     else:
-        return ""
+        raise Exception("Can't find executable file")
+
+def get_library_version(build_dir, lib_name):
+    # Build corresponding version getter
+    subprocess.run([
+        "cmake",
+        "--build", build_dir,
+        "--config", "Release",
+        "--target", "get-version-" + lib_name])
+    version_getter_path = get_executable_path(build_dir, f"get-version-{lib_name}")
+
+    return subprocess.check_output([version_getter_path]).decode("utf-8").strip()
 
 def merge_to_best(res1, res2):
     if res1 == None:
@@ -159,22 +171,22 @@ build_dir = sys.argv[1]
 iteration_count = max(int(sys.argv[2]), 1)
 cmake_extra_options = sys.argv[3:]
 
-#List the libraries we want to test
+# List the libraries we want to test
 libraries = [
     make_library_info("Maki", "maki"),
     make_library_info("MSM", "msm"),
     make_library_info("MSM (`backmp11`)", "msm-backmp11"),
     make_library_info("SML", "sml")]
 
-#Get library versions
-for library in libraries:
-    library.version = get_library_version(library.name)
-
-#Initialize CMake
+# Initialize CMake
 cmake_command = ["cmake", "-S", src_dir, "-B", build_dir] + cmake_extra_options
 subprocess.run(cmake_command)
 
-#Run tests
+# Get library versions
+for library in libraries:
+    library.version = get_library_version(build_dir, library.name)
+
+# Run tests
 for iteration_index in range(iteration_count):
     for library in libraries:
         print("===== " + library.pretty_name + ", iteration " + str(iteration_index + 1) + "/" + str(iteration_count) + " =====")
@@ -185,7 +197,7 @@ for iteration_index in range(iteration_count):
         print()
         library.test_result = merge_to_best(library.test_result, result)
 
-#Print test results in markdown format
+# Print test results in markdown format
 print("===== Final Results (markdown format) =====")
 print("Best results of", iteration_count, "iterations:")
 print_test_results(libraries)
