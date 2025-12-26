@@ -18,16 +18,6 @@ struct state_transition_event
 {
 };
 
-// Emulated level 1 state completion event
-struct state_1_completion_event
-{
-};
-
-// Emulated level 0 state completion event
-struct state_0_completion_event
-{
-};
-
 // Level 2 state
 template<int I0, int I1, int I2>
 struct state_2: msm::front::state<>
@@ -40,26 +30,11 @@ struct state_2: msm::front::state<>
     }
 };
 
-// Level 1 emulated final state
-template<int I0, int I1>
-struct state_1_fin: msm::front::state<>
-{
-};
-
-struct state_1_fin_action
-{
-    template<class Event, class Fsm, class SourceState, class TargetState>
-    void operator()(
-        const Event& /*evt*/,
-        Fsm& fsm,
-        SourceState&,
-        TargetState&)
-    {
-        fsm.process_state_1_completion_event();
-    }
-};
-
 // Level 1 state
+template<int I0, int I1>
+struct pseudo_exit_1: msm::front::exit_pseudo_state<state_transition_event<I0, I1, 2>>
+{
+};
 template<int I0, int I1>
 struct state_1_: msm::front::state_machine_def<state_1_<I0, I1>>
 {
@@ -69,42 +44,27 @@ struct state_1_: msm::front::state_machine_def<state_1_<I0, I1>>
     <
         Row<state_2<I0, I1, 0>, state_transition_event<I0, I1, 0>, state_2<I0, I1, 1>>,
         Row<state_2<I0, I1, 1>, state_transition_event<I0, I1, 1>, state_2<I0, I1, 2>>,
-        Row<state_2<I0, I1, 2>, state_transition_event<I0, I1, 2>, state_1_fin<I0, I1>, state_1_fin_action>
+        Row<state_2<I0, I1, 2>, state_transition_event<I0, I1, 2>, pseudo_exit_1<I0, I1>>
     >{};
 
     template<class Event, class Fsm>
     void on_entry(const Event& event, Fsm& fsm)
     {
         pcounter = fsm.pcounter;
-        process_state_1_completion_event = fsm.process_state_1_completion_event;
     }
 
     int* pcounter = nullptr;
-    std::function<void()> process_state_1_completion_event;
 };
 template<int I0, int I1>
 using state_1 = msm::back::state_machine<state_1_<I0, I1>>;
-
-// Level 0 emulated final state
-template<int I0>
-struct state_0_fin: msm::front::state<>
-{
-};
-
-struct state_0_fin_action
-{
-    template<class Event, class Fsm, class SourceState, class TargetState>
-    void operator()(
-        const Event& evt,
-        Fsm& fsm,
-        SourceState&,
-        TargetState&)
-    {
-        fsm.process_state_0_completion_event();
-    }
-};
+template<int I0, int I1>
+using exit_point_1 = state_1<I0, I1>::template exit_pt<pseudo_exit_1<I0, I1>>;
 
 // Level 0 state
+template<int I0>
+struct pseudo_exit_0: msm::front::exit_pseudo_state<state_transition_event<I0, 2, 2>>
+{
+};
 template<int I0>
 struct state_0_: msm::front::state_machine_def<state_0_<I0>>
 {
@@ -112,33 +72,23 @@ struct state_0_: msm::front::state_machine_def<state_0_<I0>>
 
     struct transition_table: mpl::vector
     <
-        Row<state_1<I0, 0>, state_1_completion_event, state_1<I0, 1>>,
-        Row<state_1<I0, 1>, state_1_completion_event, state_1<I0, 2>>,
-        Row<state_1<I0, 2>, state_1_completion_event, state_0_fin<I0>, state_0_fin_action>
+        Row<exit_point_1<I0, 0>, state_transition_event<I0, 0, 2>, state_1<I0, 1>>,
+        Row<exit_point_1<I0, 1>, state_transition_event<I0, 1, 2>, state_1<I0, 2>>,
+        Row<exit_point_1<I0, 2>, state_transition_event<I0, 2, 2>, pseudo_exit_0<I0>>
     >{};
 
     template<class Event, class Fsm>
     void on_entry(const Event& event, Fsm& fsm)
     {
         pcounter = &fsm.counter;
-        process_state_1_completion_event =
-            [&fsm]
-            {
-                fsm.process_event(state_1_completion_event{});
-            };
-        process_state_0_completion_event =
-            [&fsm]
-            {
-                fsm.process_event(state_0_completion_event{});
-            };
     }
 
     int* pcounter = nullptr;
-    std::function<void()> process_state_1_completion_event;
-    std::function<void()> process_state_0_completion_event;
 };
 template<int I0>
 using state_0 = msm::back::state_machine<state_0_<I0>>;
+template<int I0>
+using exit_point_0 = state_0<I0>::template exit_pt<pseudo_exit_0<I0>>;
 
 struct fsm_: public msm::front::state_machine_def<fsm_>
 {
@@ -146,9 +96,9 @@ struct fsm_: public msm::front::state_machine_def<fsm_>
 
     struct transition_table: mpl::vector
     <
-        Row<state_0<0>, state_0_completion_event, state_0<1>>,
-        Row<state_0<1>, state_0_completion_event, state_0<2>>,
-        Row<state_0<2>, state_0_completion_event, state_0<0>>
+        Row<exit_point_0<0>, state_transition_event<0, 2, 2>, state_0<1>>,
+        Row<exit_point_0<1>, state_transition_event<1, 2, 2>, state_0<2>>,
+        Row<exit_point_0<2>, state_transition_event<2, 2, 2>, state_0<0>>
     >{};
 
     int counter = 0;
