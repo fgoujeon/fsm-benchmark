@@ -27,18 +27,18 @@ python run-benchmarks.py %BUILD_DIR% 3 -G "Visual Studio 17 2022" -A "x64" -D FS
 Large FSM (best of 3 runs):
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 1.0.4              | 9.459 s    | 0.399 s        | 19.5 KiB    |
-| **MSM** 1.90.0              | 27.384 s   | 1.418 s        | 59.0 KiB    |
-| **MSM (`backmp11`)** 1.90.0 | 9.341 s    | 1.209 s        | 60.0 KiB    |
-| **SML** 1.1.10              | 7.407 s    | 0.832 s        | 48.0 KiB    |
+| **Maki** 1.0.4              | 6.768 s    | 0.389 s        | 19.5 KiB    |
+| **MSM** 1.90.0              | 24.634 s   | 1.423 s        | 59.0 KiB    |
+| **MSM (`backmp11`)** 1.90.0 | 6.584 s    | 1.200 s        | 60.0 KiB    |
+| **SML** 1.1.10              | 7.051 s    | 0.797 s        | 48.0 KiB    |
 
 Deep FSM (best of 3 runs):
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 1.0.4              | 14.371 s   | 0.481 s        | 25.5 KiB    |
-| **MSM** 1.90.0              | 37.484 s   | 3.471 s        | 170.0 KiB   |
-| **MSM (`backmp11`)** 1.90.0 | 13.062 s   | 3.863 s        | 238.5 KiB   |
-| **SML** 1.1.13              | 12.908 s   | 1.817 s        | 150.0 KiB   |
+| **Maki** 1.0.4              | 13.934 s   | 0.484 s        | 25.5 KiB    |
+| **MSM** 1.90.0              | 34.637 s   | 3.462 s        | 170.0 KiB   |
+| **MSM (`backmp11`)** 1.90.0 | 10.296 s   | 3.703 s        | 238.5 KiB   |
+| **SML** 1.1.13              | 9.639 s    | 1.758 s        | 150.0 KiB   |
 
 Note: SML 1.1.13 Large FSM build fails with error C1202 (recursive type or function dependency context too complex).
 
