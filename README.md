@@ -35,7 +35,7 @@ Large FSM (best of 3 runs):
 Deep FSM (best of 3 runs):
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 1.0.4              | 16.732 s   | 0.572 s        | 33.5 KiB    |
+| **Maki** 1.0.4              | 14.371 s   | 0.481 s        | 25.5 KiB    |
 | **MSM** 1.90.0              | 37.484 s   | 3.471 s        | 170.0 KiB   |
 | **MSM (`backmp11`)** 1.90.0 | 13.062 s   | 3.863 s        | 238.5 KiB   |
 | **SML** 1.1.13              | 12.908 s   | 1.817 s        | 150.0 KiB   |
@@ -63,7 +63,7 @@ Large FSM (best of 3 runs):
 Deep FSM (best of 3 runs):
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 1.0.4              | 1.532 s    | 0.029 s        | 43.4 KiB    |
+| **Maki** 1.0.4              | 1.354 s    | 0.011 s        | 21.3 KiB    |
 | **MSM** 1.90.0              | 9.534 s    | 0.933 s        | 671.7 KiB   |
 | **MSM (`backmp11`)** 1.90.0 | 4.497 s    | 0.922 s        | 660.8 KiB   |
 | **SML** 1.1.13              | 3.707 s    | 0.247 s        | 534.4 KiB   |
@@ -89,7 +89,7 @@ Large FSM (best of 3 runs):
 Deep FSM (best of 3 runs):
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 1.0.4              | 2.945 s    | 0.025 s        | 42.1 KiB    |
+| **Maki** 1.0.4              | 2.818 s    | 0.023 s        | 24.2 KiB    |
 | **MSM** 1.90.0              | 8.823 s    | 1.328 s        | 720.4 KiB   |
 | **MSM (`backmp11`)** 1.90.0 | 3.763 s    | 1.017 s        | 588.0 KiB   |
 | **SML** 1.1.13              | 4.326 s    | 0.599 s        | 1036.3 KiB  |

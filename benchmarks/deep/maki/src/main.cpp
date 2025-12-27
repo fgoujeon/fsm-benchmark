@@ -58,7 +58,8 @@ constexpr auto transition_table = maki::transition_table{}
 constexpr auto machine_conf = maki::machine_conf{}
     .transition_tables(transition_table)
     .context_a<context>()
-    .small_event_max_size(sizeof(int));
+    .small_event_max_size(sizeof(int))
+    .process_event_now_enabled(true);
 using sm_t = maki::machine<machine_conf>;
 
 int test()
@@ -68,7 +69,7 @@ int test()
     for(auto i = 0; i < test_loop_size; ++i)
     {
 #define X(i0, i1, i2) \
-    sm.process_event(state_transition_event<i0, i1, i2>{});
+    sm.process_event_now(state_transition_event<i0, i1, i2>{});
         COUNTER
 #undef X
     }
