@@ -3,7 +3,7 @@ This repository aims to benchmark various C++ FSM (Finite State Machine) librari
 Tested libraries are:
 
 * [Maki](https://github.com/fgoujeon/maki);
-* [Boost](https://www.boost.org/).MSM;
+* [Boost](https://www.boost.org/).MSM (with its `back` and `backmp11` back ends);
 * [\[Boost::ext\].SML](https://boost-ext.github.io/sml/).
 
 **Disclaimer**:
@@ -11,6 +11,7 @@ Tested libraries are:
 * I'm the author of Maki.
 * I've tried my best to make the test as fair as possible for every library. However, since I'm only an expert in my own library, I might have done mistakes. Please feel free to check the implementations and contact me if something has to be fixed.
 * Keep in mind that this is only a single test. Different benchmarks may (or may not) give different results.
+
 
 ## Results
 
@@ -42,6 +43,7 @@ Deep FSM (best of 3 runs):
 
 Note: SML 1.1.13 Large FSM build fails with error C1202 (recursive type or function dependency context too complex).
 
+
 ### GCC
 
 * Hardware: AMD Ryzen 7 7800X3D, 32 GiB RAM
@@ -67,6 +69,7 @@ Deep FSM (best of 3 runs):
 | **MSM** 1.90.0              | 9.534 s    | 0.933 s        | 671.7 KiB   |
 | **MSM (`backmp11`)** 1.90.0 | 4.497 s    | 0.922 s        | 660.8 KiB   |
 | **SML** 1.1.13              | 3.707 s    | 0.247 s        | 534.4 KiB   |
+
 
 ### Clang
 
@@ -94,11 +97,12 @@ Deep FSM (best of 3 runs):
 | **MSM (`backmp11`)** 1.90.0 | 3.763 s    | 1.017 s        | 588.0 KiB   |
 | **SML** 1.1.13              | 4.326 s    | 0.599 s        | 1036.3 KiB  |
 
-## The Test
 
-The repository defines one program per library. Each program must implement, using its assigned library, the test described below.
+## Benchmarks Specifications
 
-The test tries to mimic a real-life large FSM. It consists of:
+### Large FSM
+
+This benchmark tries to mimic a real-life large FSM. It consists of:
 
 * an `int counter`;
 * a large FSM:
@@ -121,4 +125,85 @@ The test tries to mimic a real-life large FSM. It consists of:
   * returns the value of the counter;
 * a `main()` function that calls the `test()` function 1,000 times and checks that the counter has the expected value.
 
-Note: Each program is required to enable run-to-completion. This implies that FSM libraries that don't support run-to-completion can't take part in this benchmark.
+
+### Deep FSM
+
+This benchmark shall define an FSM with three levels of composite states:
+
+* the FSM shall contain three level-0 composite states;
+* each level-0 composite state shall contain three level-1 composite states and a final state;
+* each level-1 composite state shall contain three level-2 simple states and a final state;
+* each level-2 simple state shall define an exit action that adds `x * 3 + y * 3 + z + 1` to a counter, where:
+  * `x` is the ID of the parent level-0 state;
+  * `y` is the ID of the parent level-1 state;
+  * `z` is the ID of the level-2 state.
+
+The transition table of the FSM shall be the following:
+
+```
+[*]          -> lvl0_state_0
+lvl0_state_0 -> lvl0_state_1
+lvl0_state_1 -> lvl0_state_2
+lvl0_state_2 -> lvl0_state_0
+```
+
+The transition table of every level-0 composite state shall be the following:
+
+```
+[*]           -> lvl1_state_x0
+lvl1_state_x0 -> lvl1_state_x1
+lvl1_state_x1 -> lvl1_state_x2
+lvl1_state_x2 -> [*]
+```
+
+The transition table of every level-1 composite state shall be the following:
+
+```
+[*]            -> lvl2_state_xy0
+lvl2_state_xy0 -> lvl2_state_xy1 : transition_event_xy0
+lvl2_state_xy1 -> lvl2_state_xy2 : transition_event_xy1
+lvl2_state_xy2 -> [*]            : transition_event_xy2
+```
+
+The benchmark shall define a `test()` function that:
+
+* creates the counter;
+* creates the FSM;
+* executes a process loop 1,000 times.
+
+The process loop shall make the FSM process the following events (in this order), which allows a full loop in the root transition table:
+
+* `transition_event_000`;
+* `transition_event_001`;
+* `transition_event_002`;
+* `transition_event_010`;
+* `transition_event_011`;
+* `transition_event_012`;
+* `transition_event_020`;
+* `transition_event_021`;
+* `transition_event_022`;
+* `transition_event_100`;
+* `transition_event_101`;
+* `transition_event_102`;
+* `transition_event_110`;
+* `transition_event_111`;
+* `transition_event_112`;
+* `transition_event_120`;
+* `transition_event_121`;
+* `transition_event_122`;
+* `transition_event_200`;
+* `transition_event_201`;
+* `transition_event_202`;
+* `transition_event_210`;
+* `transition_event_211`;
+* `transition_event_212`;
+* `transition_event_220`;
+* `transition_event_221`;
+* `transition_event_222`.
+
+The benchmark shall invoke the `test()` function 1,000 times and check that the counter has the expected value.
+
+
+## Note
+
+Each program is required to enable run-to-completion. This implies that FSM libraries that don't support run-to-completion can't take part in this benchmark.
