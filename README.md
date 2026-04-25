@@ -28,18 +28,18 @@ python run-benchmarks.py %BUILD_DIR% 3 -G "Visual Studio 17 2022" -A "x64" -D FS
 Large FSM (best of 3 runs):
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 1.0.4              | 6.768 s    | 0.389 s        | 19.5 KiB    |
-| **MSM** 1.90.0              | 24.634 s   | 1.423 s        | 59.0 KiB    |
-| **MSM (`backmp11`)** 1.90.0 | 6.584 s    | 1.200 s        | 60.0 KiB    |
-| **SML** 1.1.10              | 7.051 s    | 0.797 s        | 48.0 KiB    |
+| **Maki** 1.1.0              | 6.930 s    | 0.383 s        | 19.5 KiB    |
+| **MSM** 1.90.0              | 25.388 s   | 1.426 s        | 59.0 KiB    |
+| **MSM (`backmp11`)** 1.90.0 | 6.754 s    | 1.218 s        | 60.0 KiB    |
+| **SML** 1.1.10              | 7.314 s    | 0.799 s        | 48.0 KiB    |
 
 Deep FSM (best of 3 runs):
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 1.0.4              | 13.934 s   | 0.484 s        | 25.5 KiB    |
-| **MSM** 1.90.0              | 34.637 s   | 3.462 s        | 170.0 KiB   |
-| **MSM (`backmp11`)** 1.90.0 | 10.296 s   | 3.703 s        | 238.5 KiB   |
-| **SML** 1.1.13              | 9.639 s    | 1.758 s        | 150.0 KiB   |
+| **Maki** 1.1.0              | 14.897 s   | 0.483 s        | 25.5 KiB    |
+| **MSM** 1.90.0              | 36.803 s   | 3.611 s        | 170.0 KiB   |
+| **MSM (`backmp11`)** 1.90.0 | 10.939 s   | 3.801 s        | 238.5 KiB   |
+| **SML** 1.1.13              | 10.404 s   | 1.827 s        | 150.0 KiB   |
 
 Note: SML 1.1.13 Large FSM build fails with error C1202 (recursive type or function dependency context too complex).
 
@@ -57,18 +57,18 @@ CXX=g++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D F
 Large FSM (best of 3 runs):
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 1.0.4              | 1.229 s    | 0.264 s        | 25.4 KiB    |
-| **MSM** 1.90.0              | 5.602 s    | 1.038 s        | 332.8 KiB   |
-| **MSM (`backmp11`)** 1.90.0 | 2.033 s    | 0.469 s        | 168.6 KiB   |
-| **SML** 1.1.13              | 2.329 s    | 0.254 s        | 99.4 KiB    |
+| **Maki** 1.1.0              | 1.228 s    | 0.264 s        | 25.4 KiB    |
+| **MSM** 1.90.0              | 5.631 s    | 1.048 s        | 332.8 KiB   |
+| **MSM (`backmp11`)** 1.90.0 | 2.018 s    | 0.467 s        | 168.6 KiB   |
+| **SML** 1.1.13              | 2.344 s    | 0.257 s        | 99.4 KiB    |
 
 Deep FSM (best of 3 runs):
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 1.0.4              | 1.377 s    | 0.011 s        | 21.9 KiB    |
-| **MSM** 1.90.0              | 9.543 s    | 0.934 s        | 672.2 KiB   |
-| **MSM (`backmp11`)** 1.90.0 | 4.484 s    | 0.947 s        | 661.4 KiB   |
-| **SML** 1.1.13              | 3.722 s    | 0.256 s        | 538.9 KiB   |
+| **Maki** 1.1.0              | 1.377 s    | 0.011 s        | 22.0 KiB    |
+| **MSM** 1.90.0              | 9.561 s    | 0.948 s        | 672.2 KiB   |
+| **MSM (`backmp11`)** 1.90.0 | 4.501 s    | 0.936 s        | 661.4 KiB   |
+| **SML** 1.1.13              | 3.740 s    | 0.253 s        | 538.9 KiB   |
 
 
 ### Clang
@@ -84,18 +84,18 @@ CXX=clang++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release 
 Large FSM (best of 3 runs):
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 1.0.4              | 1.905 s    | 0.138 s        | 25.1 KiB    |
-| **MSM** 1.90.0              | 5.096 s    | 1.117 s        | 400.3 KiB   |
-| **MSM (`backmp11`)** 1.90.0 | 1.653 s    | 0.550 s        | 140.0 KiB   |
-| **SML** 1.1.13              | 3.346 s    | 0.809 s        | 668.8 KiB   |
+| **Maki** 1.1.0              | 1.904 s    | 0.137 s        | 25.1 KiB    |
+| **MSM** 1.90.0              | 5.106 s    | 1.074 s        | 400.3 KiB   |
+| **MSM (`backmp11`)** 1.90.0 | 1.652 s    | 0.596 s        | 140.0 KiB   |
+| **SML** 1.1.13              | 3.352 s    | 0.819 s        | 668.8 KiB   |
 
 Deep FSM (best of 3 runs):
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 1.0.4              | 2.817 s    | 0.018 s        | 20.8 KiB    |
-| **MSM** 1.90.0              | 8.214 s    | 1.343 s        | 720.9 KiB   |
-| **MSM (`backmp11`)** 1.90.0 | 3.616 s    | 1.029 s        | 588.5 KiB   |
-| **SML** 1.1.13              | 4.077 s    | 0.496 s        | 1020.8 KiB  |
+| **Maki** 1.1.0              | 2.845 s    | 0.017 s        | 20.8 KiB    |
+| **MSM** 1.90.0              | 8.239 s    | 1.332 s        | 720.9 KiB   |
+| **MSM (`backmp11`)** 1.90.0 | 3.625 s    | 1.011 s        | 588.5 KiB   |
+| **SML** 1.1.13              | 4.079 s    | 0.493 s        | 1020.8 KiB  |
 
 
 ## Benchmarks Specifications
