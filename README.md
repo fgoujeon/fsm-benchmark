@@ -47,8 +47,8 @@ Note: SML 1.1.13 Large FSM build fails with error C1202 (recursive type or funct
 ### GCC
 
 * Hardware: AMD Ryzen 7 7800X3D, 32 GiB RAM
-* System: Linux 6.18.2-arch2-1
-* Compiler: GCC 15.2.1
+* System: Linux 6.19.13-arch1-1
+* Compiler: GCC 15.2.1 20260209
 
 ```bash
 CXX=g++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D FSMB_MSM_INCLUDE_DIR=${MSM_INCLUDE_DIR} -D FSMB_FORCED_CXX_STANDARD=20
@@ -57,25 +57,25 @@ CXX=g++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D F
 Large FSM (best of 3 runs):
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 1.0.4              | 1.211 s    | 0.255 s        | 24.8 KiB    |
-| **MSM** 1.90.0              | 5.624 s    | 1.045 s        | 332.2 KiB   |
-| **MSM (`backmp11`)** 1.90.0 | 2.023 s    | 0.437 s        | 168.0 KiB   |
-| **SML** 1.1.13              | 2.343 s    | 0.249 s        | 98.8 KiB    |
+| **Maki** 1.0.4              | 1.229 s    | 0.264 s        | 25.4 KiB    |
+| **MSM** 1.90.0              | 5.602 s    | 1.038 s        | 332.8 KiB   |
+| **MSM (`backmp11`)** 1.90.0 | 2.033 s    | 0.469 s        | 168.6 KiB   |
+| **SML** 1.1.13              | 2.329 s    | 0.254 s        | 99.4 KiB    |
 
 Deep FSM (best of 3 runs):
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 1.0.4              | 1.354 s    | 0.011 s        | 21.3 KiB    |
-| **MSM** 1.90.0              | 9.534 s    | 0.933 s        | 671.7 KiB   |
-| **MSM (`backmp11`)** 1.90.0 | 4.497 s    | 0.922 s        | 660.8 KiB   |
-| **SML** 1.1.13              | 3.707 s    | 0.247 s        | 534.4 KiB   |
+| **Maki** 1.0.4              | 1.377 s    | 0.011 s        | 21.9 KiB    |
+| **MSM** 1.90.0              | 9.543 s    | 0.934 s        | 672.2 KiB   |
+| **MSM (`backmp11`)** 1.90.0 | 4.484 s    | 0.947 s        | 661.4 KiB   |
+| **SML** 1.1.13              | 3.722 s    | 0.256 s        | 538.9 KiB   |
 
 
 ### Clang
 
 * Hardware: AMD Ryzen 7 7800X3D, 32 GiB RAM
-* System: Linux 6.18.2-arch2-1
-* Compiler: Clang 21.1.6
+* System: Linux 6.19.13-arch1-1
+* Compiler: Clang 22.1.3
 
 ```bash
 CXX=clang++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D FSMB_MSM_INCLUDE_DIR=${MSM_INCLUDE_DIR} -D FSMB_FORCED_CXX_STANDARD=20
@@ -84,18 +84,18 @@ CXX=clang++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release 
 Large FSM (best of 3 runs):
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 1.0.4              | 1.928 s    | 0.134 s        | 24.6 KiB    |
-| **MSM** 1.90.0              | 5.420 s    | 1.102 s        | 399.8 KiB   |
-| **MSM (`backmp11`)** 1.90.0 | 1.712 s    | 0.583 s        | 139.5 KiB   |
-| **SML** 1.1.13              | 3.379 s    | 0.810 s        | 668.2 KiB   |
+| **Maki** 1.0.4              | 1.905 s    | 0.138 s        | 25.1 KiB    |
+| **MSM** 1.90.0              | 5.096 s    | 1.117 s        | 400.3 KiB   |
+| **MSM (`backmp11`)** 1.90.0 | 1.653 s    | 0.550 s        | 140.0 KiB   |
+| **SML** 1.1.13              | 3.346 s    | 0.809 s        | 668.8 KiB   |
 
 Deep FSM (best of 3 runs):
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 1.0.4              | 2.818 s    | 0.023 s        | 24.2 KiB    |
-| **MSM** 1.90.0              | 8.823 s    | 1.328 s        | 720.4 KiB   |
-| **MSM (`backmp11`)** 1.90.0 | 3.763 s    | 1.017 s        | 588.0 KiB   |
-| **SML** 1.1.13              | 4.326 s    | 0.599 s        | 1036.3 KiB  |
+| **Maki** 1.0.4              | 2.817 s    | 0.018 s        | 20.8 KiB    |
+| **MSM** 1.90.0              | 8.214 s    | 1.343 s        | 720.9 KiB   |
+| **MSM (`backmp11`)** 1.90.0 | 3.616 s    | 1.029 s        | 588.5 KiB   |
+| **SML** 1.1.13              | 4.077 s    | 0.496 s        | 1020.8 KiB  |
 
 
 ## Benchmarks Specifications
