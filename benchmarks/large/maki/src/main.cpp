@@ -61,12 +61,15 @@ constexpr auto transition_table = maki::transition_table{}
 #undef X
 ;
 
-constexpr auto machine_conf = maki::machine_conf{}
-    .transition_tables(transition_table)
-    .context_a<context>()
-    .small_event_max_size(sizeof(int))
-    .process_event_now_enabled(true)
-;
+struct machine_conf
+{
+    static constexpr auto value = maki::machine_conf{}
+        .transition_tables(transition_table)
+        .context_a<context>()
+        .small_event_max_size(sizeof(int))
+        .process_event_now_enabled(true)
+    ;
+};
 
 using sm_t = maki::machine<machine_conf>;
 
