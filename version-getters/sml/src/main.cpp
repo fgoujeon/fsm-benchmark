@@ -10,10 +10,10 @@
 int main()
 {
     std::cout
-        << (BOOST_SML_VERSION / 1'000)
+        << (BOOST_SML_VERSION / 100)
         << '.'
-        << (BOOST_SML_VERSION / 100 % 10)
+        << (BOOST_SML_VERSION / 10 % 10)
         << '.'
-        << (BOOST_SML_VERSION % 100)
+        << (BOOST_SML_VERSION % 10)
         << '\n';
 }

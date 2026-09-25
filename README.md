@@ -28,27 +28,25 @@ python run-benchmarks.py %BUILD_DIR% 3 -G "Visual Studio 17 2022" -A "x64" -D FS
 Large FSM (best of 3 runs):
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 2.0.0              | 6.542 s    | 0.696 s        | 21.0 KiB    |
-| **MSM** 1.90.0              | 25.080 s   | 1.408 s        | 59.0 KiB    |
-| **MSM (`backmp11`)** 1.90.0 | 6.936 s    | 1.194 s        | 60.0 KiB    |
-| **SML** 1.1.10              | 7.366 s    | 0.809 s        | 48.0 KiB    |
+| **Maki** 2.0.2              | 6.298 s    | 1.042 s        | 20.5 KiB    |
+| **MSM** 1.90.0              | 25.544 s   | 1.504 s        | 59.0 KiB    |
+| **MSM (`backmp11`)** 1.90.0 | 6.784 s    | 1.223 s        | 60.0 KiB    |
+| **SML** 1.2.0               | 13.472 s   | 1.776 s        | 43.0 KiB    |
 
 Deep FSM (best of 3 runs):
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 2.0.0              | 8.665 s    | 0.368 s        | 25.5 KiB    |
-| **MSM** 1.90.0              | 35.149 s   | 3.426 s        | 170.0 KiB   |
-| **MSM (`backmp11`)** 1.90.0 | 10.614 s   | 3.674 s        | 238.5 KiB   |
-| **SML** 1.1.13              | 9.987 s    | 1.773 s        | 150.0 KiB   |
-
-Note: SML 1.1.13 Large FSM build fails with error C1202 (recursive type or function dependency context too complex).
+| **Maki** 2.0.2              | 8.605 s    | 0.383 s        | 25.5 KiB    |
+| **MSM** 1.90.0              | 35.695 s   | 3.468 s        | 170.0 KiB   |
+| **MSM (`backmp11`)** 1.90.0 | 10.522 s   | 3.762 s        | 238.5 KiB   |
+| **SML** 1.2.0               | 10.290 s   | 2.047 s        | 109.0 KiB   |
 
 
 ### GCC
 
 * Hardware: AMD Ryzen 7 7800X3D, 32 GiB RAM
-* System: Linux 7.0.5-arch1-1
-* Compiler: GCC 16.1.1 20260430
+* System: Linux 7.2.4-arch1-2
+* Compiler: GCC 16.2.1 20260810
 
 ```bash
 CXX=g++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D FSMB_MSM_INCLUDE_DIR=${MSM_INCLUDE_DIR} -D FSMB_FORCED_CXX_STANDARD=20
@@ -57,25 +55,25 @@ CXX=g++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D F
 Large FSM (best of 3 runs):
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 2.0.0              | 1.296 s    | 0.277 s        | 25.3 KiB    |
-| **MSM** 1.90.0              | 5.739 s    | 1.048 s        | 336.8 KiB   |
-| **MSM (`backmp11`)** 1.90.0 | 2.081 s    | 0.491 s        | 172.6 KiB   |
-| **SML** 1.1.13              | 2.354 s    | 0.226 s        | 95.4 KiB    |
+| **Maki** 2.0.2              | 1.317 s    | 0.276 s        | 25.3 KiB    |
+| **MSM** 1.90.0              | 5.843 s    | 1.065 s        | 336.8 KiB   |
+| **MSM (`backmp11`)** 1.90.0 | 2.121 s    | 0.497 s        | 172.6 KiB   |
+| **SML** 1.2.0               | 2.685 s    | 0.285 s        | 96.0 KiB    |
 
 Deep FSM (best of 3 runs):
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 2.0.0              | 1.415 s    | 0.008 s        | 21.5 KiB    |
-| **MSM** 1.90.0              | 9.710 s    | 0.961 s        | 674.6 KiB   |
-| **MSM (`backmp11`)** 1.90.0 | 4.641 s    | 0.888 s        | 657.3 KiB   |
-| **SML** 1.1.13              | 3.861 s    | 0.244 s        | 563.5 KiB   |
+| **Maki** 2.0.2              | 1.452 s    | 0.008 s        | 21.5 KiB    |
+| **MSM** 1.90.0              | 9.896 s    | 0.980 s        | 674.6 KiB   |
+| **MSM (`backmp11`)** 1.90.0 | 4.694 s    | 0.904 s        | 657.3 KiB   |
+| **SML** 1.2.0               | 3.179 s    | 0.246 s        | 401.7 KiB   |
 
 
 ### Clang
 
 * Hardware: AMD Ryzen 7 7800X3D, 32 GiB RAM
-* System: Linux 7.0.5-arch1-1
-* Compiler: Clang 22.1.5
+* System: Linux 7.2.4-arch1-2
+* Compiler: Clang 22.1.8
 
 ```bash
 CXX=clang++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release -D FSMB_MSM_INCLUDE_DIR=${MSM_INCLUDE_DIR} -D FSMB_FORCED_CXX_STANDARD=20
@@ -84,18 +82,18 @@ CXX=clang++ python run-benchmarks.py ${BUILD_DIR} 3 -D CMAKE_BUILD_TYPE=Release 
 Large FSM (best of 3 runs):
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 2.0.0              | 1.668 s    | 0.179 s        | 34.9 KiB    |
-| **MSM** 1.90.0              | 5.141 s    | 1.105 s        | 400.3 KiB   |
-| **MSM (`backmp11`)** 1.90.0 | 1.684 s    | 0.568 s        | 140.0 KiB   |
-| **SML** 1.1.13              | 3.341 s    | 0.808 s        | 668.8 KiB   |
+| **Maki** 2.0.2              | 1.677 s    | 0.178 s        | 34.9 KiB    |
+| **MSM** 1.90.0              | 5.219 s    | 1.093 s        | 400.3 KiB   |
+| **MSM (`backmp11`)** 1.90.0 | 1.704 s    | 0.603 s        | 140.0 KiB   |
+| **SML** 1.2.0               | 3.924 s    | 0.862 s        | 679.2 KiB   |
 
 Deep FSM (best of 3 runs):
 |                             | Build time | Execution time | Binary size |
 |-----------------------------|-----------:|---------------:|------------:|
-| **Maki** 2.0.0              | 1.927 s    | 0.038 s        | 30.8 KiB    |
-| **MSM** 1.90.0              | 8.313 s    | 1.334 s        | 720.9 KiB   |
-| **MSM (`backmp11`)** 1.90.0 | 3.681 s    | 1.008 s        | 588.5 KiB   |
-| **SML** 1.1.13              | 4.062 s    | 0.491 s        | 1020.8 KiB  |
+| **Maki** 2.0.2              | 1.943 s    | 0.038 s        | 30.8 KiB    |
+| **MSM** 1.90.0              | 8.411 s    | 1.345 s        | 720.9 KiB   |
+| **MSM (`backmp11`)** 1.90.0 | 3.731 s    | 1.028 s        | 588.5 KiB   |
+| **SML** 1.2.0               | 3.782 s    | 0.483 s        | 682.9 KiB   |
 
 
 ## Benchmarks Specifications
