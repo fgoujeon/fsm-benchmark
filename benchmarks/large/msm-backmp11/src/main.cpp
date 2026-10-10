@@ -4,17 +4,13 @@
 //https://www.boost.org/LICENSE_1_0.txt)
 //Official repository: https://github.com/fgoujeon/fsm-benchmark
 
-#define BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
-#define BOOST_MPL_LIMIT_VECTOR_SIZE PROBLEM_SIZE_X_2
-#define BOOST_MPL_LIMIT_MAP_SIZE PROBLEM_SIZE_X_2
-
 #include "common.hpp"
 #include <boost/msm/backmp11/state_machine.hpp>
 #include <boost/msm/front/state_machine_def.hpp>
 #include <boost/msm/front/functor_row.hpp>
 
 namespace msm = boost::msm;
-namespace mpl = boost::mpl;
+namespace mp11 = boost::mp11;
 using namespace msm::front;
 
 template<int Index>
@@ -34,7 +30,7 @@ struct state_tpl: msm::front::state<>
     template<class Event, class Fsm>
     void on_exit(const Event& event, Fsm& fsm)
     {
-        fsm.process_event(internal_transition_event{});
+        fsm.enqueue_event(internal_transition_event{});
     }
 };
 
@@ -72,14 +68,14 @@ struct fsm_: public msm::front::state_machine_def<fsm_>
 {
     using initial_state = state_tpl<0>;
 
-    struct transition_table: mpl::vector
+    using transition_table = mp11::mp_list
     <
 #define X(N) \
         COMMA_IF_NOT_0(N) Row<state_tpl<N>, state_transition_event<N>, state_tpl<(N + 1) % PROBLEM_SIZE>, state_transition_action<N>, guard<N>> \
         , Row<state_tpl<N>, internal_transition_event, none, internal_transition_action<N>>
         COUNTER
 #undef X
-    >{};
+    >;
 
     int counter = 0;
 };

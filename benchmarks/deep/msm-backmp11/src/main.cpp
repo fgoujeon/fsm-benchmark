@@ -10,10 +10,8 @@
 #include <boost/msm/front/functor_row.hpp>
 
 namespace msm = boost::msm;
-namespace mpl = boost::mpl;
+namespace mp11 = boost::mp11;
 using namespace msm::front;
-
-int last_added_id = -1;
 
 template<int Index>
 struct state_transition_event
@@ -29,15 +27,6 @@ struct state_0: msm::front::state<>
     template<class Event, class Fsm>
     void on_exit(const Event& event, Fsm& fsm)
     {
-        /*
-        This exit action is sometimes called several times in a row because of
-        some bug. This is the workaround.
-        */
-        if (last_added_id == Id)
-        {
-            return;
-        }
-
         if constexpr (std::is_same_v<Fsm, boost::msm::backmp11::state_machine<fsm_>>)
         {
             fsm.counter += Id;
@@ -46,8 +35,6 @@ struct state_0: msm::front::state<>
         {
             *fsm.pcounter += Id;
         }
-
-        last_added_id = Id;
     }
 };
 
@@ -58,11 +45,11 @@ struct state_0: msm::front::state<>
     { \
         using initial_state = state_##next_level<state_id(Id, next_level, 0)>; \
  \
-        struct transition_table: mpl::vector \
+        using transition_table = mp11::mp_list \
         < \
             Row<state_##next_level<state_id(Id, next_level, 0)>, state_transition_event<state_id(Id, next_level, 0)>, state_##next_level<state_id(Id, next_level, 1)>>, \
             Row<state_##next_level<state_id(Id, next_level, 1)>, state_transition_event<state_id(Id, next_level, 1)>, state_##next_level<state_id(Id, next_level, 2)>> \
-        >{}; \
+        >; \
  \
         template<class Event, class Fsm> \
         void on_entry(const Event& event, Fsm& fsm) \
@@ -91,12 +78,12 @@ struct fsm_: public msm::front::state_machine_def<fsm_>
 {
     using initial_state = state_3<state_id(base, 3, 0)>;
 
-    struct transition_table: mpl::vector
+    using transition_table = mp11::mp_list
     <
         Row<state_3<state_id(base, 3, 0)>, state_transition_event<state_id(base, 3, 0)>, state_3<state_id(base, 3, 1)>>,
         Row<state_3<state_id(base, 3, 1)>, state_transition_event<state_id(base, 3, 1)>, state_3<state_id(base, 3, 2)>>,
         Row<state_3<state_id(base, 3, 2)>, state_transition_event<state_id(base, 3, 2)>, state_3<state_id(base, 3, 0)>>
-    >{};
+    >;
 
     int counter = 0;
 };
