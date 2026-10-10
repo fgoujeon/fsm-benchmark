@@ -13,136 +13,93 @@ namespace msm = boost::msm;
 namespace mpl = boost::mpl;
 using namespace msm::front;
 
-template<int I0, int I1, int I2>
+int last_added_id = -1;
+
+template<int Index>
 struct state_transition_event
 {
 };
 
 struct fsm_;
 
-template<int I0>
-struct state_0_;
-
-template<int I0, int I1>
-struct state_1_;
-
-// Level 2 state
-template<int I0, int I1, int I2>
-struct state_2: msm::front::state<>
+// Lowest level state template
+template<int Id>
+struct state_0: msm::front::state<>
 {
     template<class Event, class Fsm>
     void on_exit(const Event& event, Fsm& fsm)
     {
-        constexpr auto value = compute_internal_event_value(I0, I1, I2);
+        /*
+        This exit action is sometimes called several times in a row because of
+        some bug. This is the workaround.
+        */
+        if (last_added_id == Id)
+        {
+            return;
+        }
 
         if constexpr (std::is_same_v<Fsm, boost::msm::backmp11::state_machine<fsm_>>)
         {
-            fsm.counter += value;
+            fsm.counter += Id;
         }
         else
         {
-            *fsm.pcounter += value;
+            *fsm.pcounter += Id;
         }
+
+        last_added_id = Id;
     }
 };
 
-// Level 1 state
-template<int I0, int I1>
-struct pseudo_exit_1: msm::front::exit_pseudo_state<state_transition_event<I0, I1, 2>>
-{
-};
-template<int I0, int I1>
-struct state_1_: msm::front::state_machine_def<state_1_<I0, I1>>
-{
-    using initial_state = state_2<I0, I1, 0>;
+// Intermediate level state templates
+#define STATE_TEMPLATE(level, next_level) \
+    template<int Id> \
+    struct state_##level##_: msm::front::state_machine_def<state_##level##_<Id>> \
+    { \
+        using initial_state = state_##next_level<state_id(Id, next_level, 0)>; \
+ \
+        struct transition_table: mpl::vector \
+        < \
+            Row<state_##next_level<state_id(Id, next_level, 0)>, state_transition_event<state_id(Id, next_level, 0)>, state_##next_level<state_id(Id, next_level, 1)>>, \
+            Row<state_##next_level<state_id(Id, next_level, 1)>, state_transition_event<state_id(Id, next_level, 1)>, state_##next_level<state_id(Id, next_level, 2)>> \
+        >{}; \
+ \
+        template<class Event, class Fsm> \
+        void on_entry(const Event& event, Fsm& fsm) \
+        { \
+            if constexpr (std::is_same_v<Fsm, boost::msm::backmp11::state_machine<fsm_>>) \
+            { \
+                pcounter = &fsm.counter; \
+            } \
+            else \
+            { \
+                pcounter = fsm.pcounter; \
+            } \
+        } \
+ \
+        int* pcounter = nullptr; \
+    }; \
+    template<int Id> \
+    using state_##level = msm::backmp11::state_machine<state_##level##_<Id>>;
+STATE_TEMPLATE(1, 0)
+STATE_TEMPLATE(2, 1)
+STATE_TEMPLATE(3, 2)
+#undef STATE_TEMPLATE
 
-    struct transition_table: mpl::vector
-    <
-        Row<state_2<I0, I1, 0>, state_transition_event<I0, I1, 0>, state_2<I0, I1, 1>>,
-        Row<state_2<I0, I1, 1>, state_transition_event<I0, I1, 1>, state_2<I0, I1, 2>>,
-        Row<state_2<I0, I1, 2>, state_transition_event<I0, I1, 2>, pseudo_exit_1<I0, I1>>
-    >{};
-
-    template<class Event, class Fsm>
-    void on_entry(const Event& event, Fsm& fsm)
-    {
-        if constexpr (std::is_same_v<Fsm, boost::msm::backmp11::state_machine<fsm_>>)
-        {
-            pcounter = &fsm.counter;
-        }
-        else if constexpr (std::is_same_v<Fsm, boost::msm::backmp11::state_machine<state_0_<I0>>>)
-        {
-            pcounter = fsm.pcounter;
-        }
-        else
-        {
-            static_assert(false);
-        }
-    }
-
-    int* pcounter = nullptr;
-};
-template<int I0, int I1>
-using state_1 = msm::backmp11::state_machine<state_1_<I0, I1>>;
-template<int I0, int I1>
-using exit_point_1 = state_1<I0, I1>::template exit_pt<pseudo_exit_1<I0, I1>>;
-
-// Entry action of `state_2<I0, I1, 0>` states are invoked twice without this
-// state. No idea why.
-template<int I0>
-struct state_0_ini: msm::front::state<>
-{
-};
-
-// Level 0 state
-template<int I0>
-struct pseudo_exit_0: msm::front::exit_pseudo_state<state_transition_event<I0, 2, 2>>
-{
-};
-template<int I0>
-struct state_0_: msm::front::state_machine_def<state_0_<I0>>
-{
-    using initial_state = state_0_ini<I0>;
-
-    struct transition_table: mpl::vector
-    <
-        Row<state_0_ini<I0>, none,                             state_1<I0, 0>>,
-        Row<state_1<I0, 0>,  state_transition_event<I0, 0, 2>, state_1<I0, 1>>,
-        Row<state_1<I0, 1>,  state_transition_event<I0, 1, 2>, state_1<I0, 2>>,
-        Row<state_1<I0, 2>,  state_transition_event<I0, 2, 2>, pseudo_exit_0<I0>>
-    >{};
-
-    template<class Event, class Fsm>
-    void on_entry(const Event& event, Fsm& fsm)
-    {
-        // For clarity
-        using expected_fsm_type = boost::msm::backmp11::state_machine<fsm_>;
-        static_assert(std::is_same_v<Fsm, expected_fsm_type>);
-
-        pcounter = &fsm.counter;
-    }
-
-    int* pcounter = nullptr;
-};
-template<int I0>
-using state_0 = msm::backmp11::state_machine<state_0_<I0>>;
-template<int I0>
-using exit_point_0 = state_0<I0>::template exit_pt<pseudo_exit_0<I0>>;
-
+// FSM
 struct fsm_: public msm::front::state_machine_def<fsm_>
 {
-    using initial_state = state_0<0>;
+    using initial_state = state_3<state_id(base, 3, 0)>;
 
     struct transition_table: mpl::vector
     <
-        Row<exit_point_0<0>, state_transition_event<0, 2, 2>, state_0<1>>,
-        Row<exit_point_0<1>, state_transition_event<1, 2, 2>, state_0<2>>,
-        Row<exit_point_0<2>, state_transition_event<2, 2, 2>, state_0<0>>
+        Row<state_3<state_id(base, 3, 0)>, state_transition_event<state_id(base, 3, 0)>, state_3<state_id(base, 3, 1)>>,
+        Row<state_3<state_id(base, 3, 1)>, state_transition_event<state_id(base, 3, 1)>, state_3<state_id(base, 3, 2)>>,
+        Row<state_3<state_id(base, 3, 2)>, state_transition_event<state_id(base, 3, 2)>, state_3<state_id(base, 3, 0)>>
     >{};
 
     int counter = 0;
 };
-
 using fsm = msm::backmp11::state_machine<fsm_>;
 
 int test()
@@ -153,8 +110,8 @@ int test()
 
     for(auto i = 0; i < test_loop_size; ++i)
     {
-#define X(i0, i1, i2) \
-    sm.process_event(state_transition_event<i0, i1, i2>{});
+#define X(index) \
+    sm.process_event(state_transition_event<index>{});
         COUNTER
 #undef X
     }
