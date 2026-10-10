@@ -126,42 +126,36 @@ This benchmark tries to mimic a real-life large FSM. It consists of:
 
 ### Deep FSM
 
-This benchmark shall define an FSM with three levels of composite states:
+This benchmark shall define an FSM with 4 levels of states:
 
-* the FSM shall contain three level-0 composite states;
-* each level-0 composite state shall contain three level-1 composite states and a final state;
-* each level-1 composite state shall contain three level-2 simple states and a final state;
-* each level-2 simple state shall define an exit action that adds `x * 3 + y * 3 + z + 1` to a counter, where:
-  * `x` is the ID of the parent level-0 state;
-  * `y` is the ID of the parent level-1 state;
-  * `z` is the ID of the level-2 state.
+* the FSM shall contain three level-3 composite states;
+* each level-3 composite state shall contain three level-2 composite states;
+* each level-2 composite state shall contain three level-1 composite states;
+* each level-1 composite state shall contain three level-0 simple states.
 
-The transition table of the FSM shall be the following:
+We then have a total of:
 
-```
-[*]          -> lvl0_state_0
-lvl0_state_0 -> lvl0_state_1
-lvl0_state_1 -> lvl0_state_2
-lvl0_state_2 -> lvl0_state_0
-```
+* 81 level-0 states, labelled ${state0}_n$ with $`n=\{0,1,2,...,80\}`$;
+* 27 level-1 states, labelled ${state1}_n$ with $`n=\{2,5,8,...,80\}`$;
+* 9 level-2 states, labelled ${state2}_n$ with $`n=\{8,17,26,...,80\}`$;
+* 3 level-3 states, labelled ${state3}_n$ with $`n=\{26,53,80\}`$.
 
-The transition table of every level-0 composite state shall be the following:
+Every ${state0}_n$ shall define an exit action that adds $n$ to a global counter.
 
-```
-[*]           -> lvl1_state_x0
-lvl1_state_x0 -> lvl1_state_x1
-lvl1_state_x1 -> lvl1_state_x2
-lvl1_state_x2 -> [*]
-```
+The FSM shall also define transitions for every ${event}_n$. The intended effect of ${event}_n$ is to:
 
-The transition table of every level-1 composite state shall be the following:
+* make the FSM transition from ${state0}_n$ to $`{state0}_{n+1}`$ (possibly through higher-order transitions);
+* consequently, add $n$ to the global counter.
 
-```
-[*]            -> lvl2_state_xy0
-lvl2_state_xy0 -> lvl2_state_xy1 : transition_event_xy0
-lvl2_state_xy1 -> lvl2_state_xy2 : transition_event_xy1
-lvl2_state_xy2 -> [*]            : transition_event_xy2
-```
+Actually, the subscript $n$ of a state, whatever its level, defines the ${event}_n$ that makes the FSM exit the said state.
+
+The diagram below, which represents the first level-2 state, shows the required transitions:
+
+<img src="images/deep.png">
+
+At the top level, level-3 states are laid out like so:
+
+<img src="images/deep-root.png">
 
 The benchmark shall define a `test()` function that:
 
@@ -169,37 +163,9 @@ The benchmark shall define a `test()` function that:
 * creates the FSM;
 * executes a process loop 1,000 times.
 
-The process loop shall make the FSM process the following events (in this order), which allows a full loop in the root transition table:
+The process loop shall make the FSM process all ${event}_n$ from $n=0$ to $n=80$ once.
 
-* `transition_event_000`;
-* `transition_event_001`;
-* `transition_event_002`;
-* `transition_event_010`;
-* `transition_event_011`;
-* `transition_event_012`;
-* `transition_event_020`;
-* `transition_event_021`;
-* `transition_event_022`;
-* `transition_event_100`;
-* `transition_event_101`;
-* `transition_event_102`;
-* `transition_event_110`;
-* `transition_event_111`;
-* `transition_event_112`;
-* `transition_event_120`;
-* `transition_event_121`;
-* `transition_event_122`;
-* `transition_event_200`;
-* `transition_event_201`;
-* `transition_event_202`;
-* `transition_event_210`;
-* `transition_event_211`;
-* `transition_event_212`;
-* `transition_event_220`;
-* `transition_event_221`;
-* `transition_event_222`.
-
-The benchmark shall invoke the `test()` function 1,000 times and check that the counter has the expected value.
+The benchmark shall invoke the `test()` function 500 times and check that the counter has the expected value.
 
 
 ## Note

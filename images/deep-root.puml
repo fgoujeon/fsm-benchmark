@@ -1,0 +1,8 @@
+@startuml
+
+[*]       -> state3_26
+state3_26 -> state3_53 : event_26
+state3_53 -> state3_80 : event_53
+state3_80 -> state3_26 : event_80
+
+@enduml
