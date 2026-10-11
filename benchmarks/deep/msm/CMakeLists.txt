@@ -27,6 +27,7 @@ target_include_directories(
     ${TARGET}
     PRIVATE
         ${FSMB_MSM_INCLUDE_DIR}
+        src
 )
 
 target_link_libraries(
