@@ -1,0 +1,39 @@
+@startuml
+
+state state2_8 {
+    [*]      -> state1_2
+    state1_2 -> state1_5 : event_2
+    state1_5 -> state1_8 : event_5
+
+    state state1_2 {
+        [*]      --> state0_0
+        state0_0 --> state0_1 : event_0
+        state0_1 --> state0_2 : event_1
+
+        state0_0 : exit / add(0)
+        state0_1 : exit / add(1)
+        state0_2 : exit / add(2)
+    }
+
+    state state1_5 {
+        [*]      --> state0_3
+        state0_3 --> state0_4 : event_3
+        state0_4 --> state0_5 : event_4
+
+        state0_3 : exit / add(3)
+        state0_4 : exit / add(4)
+        state0_5 : exit / add(5)
+    }
+
+    state state1_8 {
+        [*]      --> state0_6
+        state0_6 --> state0_7 : event_6
+        state0_7 --> state0_8 : event_7
+
+        state0_6 : exit / add(6)
+        state0_7 : exit / add(7)
+        state0_8 : exit / add(8)
+    }
+}
+
+@enduml

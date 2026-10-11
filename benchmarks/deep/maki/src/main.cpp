@@ -12,49 +12,43 @@ struct context
     int counter = 0;
 };
 
-template<int I0, int I1, int I2>
-struct state_transition_event
+template<int Index>
+struct state_transition_event_t
 {
 };
+template<int Index>
+constexpr auto state_transition_event = maki::event<state_transition_event_t<Index>>;
 
-// Level 2 state
-template<int I0, int I1, int I2>
-constexpr auto state_2 = maki::state_mold{}
+// Lowest level state template
+template<int Id>
+constexpr auto state_0 = maki::state_mold{}
     .exit_action_c(
-        [](auto& ctx)
+        [](context& ctx)
         {
-            constexpr auto value = compute_internal_event_value(I0, I1, I2);
-            ctx.counter += value;
+            ctx.counter += Id;
         });
 
-// Level 1 state
-template<int I0, int I1>
-constexpr auto state_1_tt = maki::transition_table{}
-    (maki::ini,          state_2<I0, I1, 0>)
-    (state_2<I0, I1, 0>, state_2<I0, I1, 1>, maki::event<state_transition_event<I0, I1, 0>>)
-    (state_2<I0, I1, 1>, state_2<I0, I1, 2>, maki::event<state_transition_event<I0, I1, 1>>)
-    (state_2<I0, I1, 2>, maki::fin,          maki::event<state_transition_event<I0, I1, 2>>);
-template<int I0, int I1>
-constexpr auto state_1 = maki::state_mold{}
-    .transition_tables(state_1_tt<I0, I1>);
-
-// Level 0 state
-template<int I0>
-constexpr auto state_0_tt = maki::transition_table{}
-    (maki::ini,      state_1<I0, 0>)
-    (state_1<I0, 0>, state_1<I0, 1>)
-    (state_1<I0, 1>, state_1<I0, 2>)
-    (state_1<I0, 2>, maki::fin);
-template<int I0>
-constexpr auto state_0 = maki::state_mold{}
-    .transition_tables(state_0_tt<I0>);
+// Intermediate level state templates
+#define STATE_TEMPLATE(level, next_level) \
+    template<int Id> \
+    constexpr auto state_##level##_tt = maki::transition_table{} \
+        (maki::ini,                                       state_##next_level<state_id(Id, next_level, 0)>) \
+        (state_##next_level<state_id(Id, next_level, 0)>, state_##next_level<state_id(Id, next_level, 1)>, state_transition_event<state_id(Id, next_level, 0)>) \
+        (state_##next_level<state_id(Id, next_level, 1)>, state_##next_level<state_id(Id, next_level, 2)>, state_transition_event<state_id(Id, next_level, 1)>); \
+    template<int Id> \
+    constexpr auto state_##level = maki::state_mold{} \
+        .transition_tables(state_##level##_tt<Id>);
+STATE_TEMPLATE(1, 0)
+STATE_TEMPLATE(2, 1)
+STATE_TEMPLATE(3, 2)
+#undef STATE_TEMPLATE
 
 // FSM
 constexpr auto transition_table = maki::transition_table{}
-    (maki::ini,  state_0<0>)
-    (state_0<0>, state_0<1>)
-    (state_0<1>, state_0<2>)
-    (state_0<2>, state_0<0>);
+    (maki::ini,                     state_3<state_id(base, 3, 0)>)
+    (state_3<state_id(base, 3, 0)>, state_3<state_id(base, 3, 1)>, state_transition_event<state_id(base, 3, 0)>)
+    (state_3<state_id(base, 3, 1)>, state_3<state_id(base, 3, 2)>, state_transition_event<state_id(base, 3, 1)>)
+    (state_3<state_id(base, 3, 2)>, state_3<state_id(base, 3, 0)>, state_transition_event<state_id(base, 3, 2)>);
 struct machine_conf
 {
     static constexpr auto value = maki::machine_conf{}
@@ -71,8 +65,8 @@ int test()
 
     for(auto i = 0; i < test_loop_size; ++i)
     {
-#define X(i0, i1, i2) \
-    sm.process_event_now(state_transition_event<i0, i1, i2>{});
+#define X(index) \
+    sm.process_event_now(state_transition_event_t<index>{});
         COUNTER
 #undef X
     }
